@@ -12,9 +12,6 @@ class DataSet(NamedTuple):
     testY: list
 
 
-Distributions = ['Normal']
-
-
 def _create_normal_distributed_data(classes_scale: int, intersect_rate: int) -> DataSet:
     np.random.seed(0)
     l = classes_scale
@@ -36,9 +33,7 @@ def _create_normal_distributed_data(classes_scale: int, intersect_rate: int) -> 
     return DataSet(trainX=X, trainY=y, testX=ValX, testY=ValY)
 
 
-def create_data_set(distribution: str, classes_scale: int, intersect_rate: int) -> DataSet:
-    if distribution in Distributions:
-        if distribution == 'Normal':
-            return _create_normal_distributed_data(classes_scale, intersect_rate)
-    else:
-        print('Unknown distribution')
+def create_data_set(classes_scale: int, intersect_rate: int) -> DataSet:
+    # из этого можно сделать некоторую общую библиотеку
+    return _create_normal_distributed_data(classes_scale, intersect_rate)
+
