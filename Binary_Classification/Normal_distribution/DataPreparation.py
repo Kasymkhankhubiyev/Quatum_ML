@@ -33,7 +33,7 @@ def _create_normal_distributed_data(classes_scale: int, intersect_rate: int) -> 
     return DataSet(trainX=X, trainY=y, testX=ValX, testY=ValY)
 
 
-def create_data_set(classes_scale: int, intersect_rate: int) -> DataSet:
+def create_data_set(classes_scale: int, intersect_rate: float) -> DataSet:
     # из этого можно сделать некоторую общую библиотеку
     return _create_normal_distributed_data(classes_scale, intersect_rate)
 
