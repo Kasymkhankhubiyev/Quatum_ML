@@ -50,10 +50,8 @@ class Model:
 
         return circuit_output
 
-
     def _myloss(self, circuit_output, targets):
         return square_loss(outputs=circuit_output, targets=targets) / len(targets)
-
 
     def _outputs_to_predictions(self, circuit_output):
         return round(circuit_output)
