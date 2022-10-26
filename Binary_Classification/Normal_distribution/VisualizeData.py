@@ -19,4 +19,10 @@ def visualize_dataset(trainX, trainY, testX, testY, name: str)-> None:
 
 
 def visualize_data(arrayX, arrayY, name: str) -> None:
-    pass
+    colors = ['blue', 'red', 'yellow', 'green']
+    for k in np.unique(arrayY):
+        plt.plot(arrayX[arrayY == k, 0], arrayX[arrayY == k, 1], 'o', label='class {}'.format(k), color=colors[k])
+    plt.legend(fontsize=7, ncol=1, facecolor='oldlace', edgecolor='r')
+    plt.title(name)
+    plt.savefig('Binary_Classification/Normal_distribution/' + name + '_transformed_data_set.png')
+    plt.close()
