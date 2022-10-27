@@ -15,7 +15,7 @@ class Model:
 
     def __init__(self):
         self.params = [make_param(name='phi'+str(i), constant=.7) for i in range(9)]
-        self.learner, self.squeeze_param = None, None
+        self.learner, self.squeeze_param, self.lr, self.steps = None, None, None, None
         self.transform_data = []
 
     def _circuit(self, X, params):
@@ -78,6 +78,7 @@ class Model:
 
     def train(self, lr: float, steps: int, sq: squeeze, trainX, trainY) -> None:
         self.squeeze_param = sq
+        self.lr, self.steps = lr, steps
         hyperparams = {'circuit': self._circuit,
                        'init_circuit_params': self.params,
                        'task': 'supervised',
@@ -104,6 +105,17 @@ class Model:
         print("Accuracy on test set: {}".format(test_score['accuracy']))
         print("Loss on test set: {}".format(test_score['loss']))
 
+        name = 'Binary_Classification/Normal_distribution/results.txt'
+        with open(name, 'a') as file:
+            file.write('results on '+str(datetime.datetime.now()) + ' : \n')
+            file.write(f'squeezing parameter:    {self.squeeze_param}+\n')
+            file.write(f'learning rate:     {self.lr} \n')
+            file.write(f'steps:     {self.steps} \n')
+            for i in range(len(testY)):
+                file.write('x: '+str(testX[i]) + ', y: '+str(testY[i]) + '\n')
+            file.write("Accuracy on test set: {}".format(test_score['accuracy']) + '\n')
+            file.write("Loss on test set: {}".format(test_score['loss']) + '\n\n\n')
+
     def _project_data(self, data):
         sq = self.squeeze_param
 
@@ -125,8 +137,11 @@ class Model:
                 ops.Kgate(self.params[5]['val']) | q[0]
                 ops.Kgate(self.params[6]['val']) | q[1]
 
-                ops.MeasureFock() | q[0]
-                ops.MeasureFock() | q[1]
+                # ops.MeasureFock() | q[0]
+                # ops.MeasureFock() | q[1]
+                #
+                # ops.m | q[0]
+                # ops.MeasureX() | q[1]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             eng.run(prog)
@@ -142,6 +157,7 @@ class Model:
         c_name = 'measurement'
         if name is not None:
             c_name = name
+        print(np.unique(new_x, return_counts=True, axis=0))
         visualize_data(arrayX=new_x, arrayY=arrY, name=c_name)
 
 
