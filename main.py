@@ -1,10 +1,11 @@
 from Binary_Classification.Normal_distribution.DataPreparation import *
 from Binary_Classification.Normal_distribution.VisualizeData import *
 from Binary_Classification.Normal_distribution.Circuit import Model
-# import strawberryfields as sf
 
-if __name__ == '__main__':
+from FisherIris import DataPrep
+from FisherIris import VisualizeData
 
+def run_binary() -> None:
     data = create_data_set(100, 1.5)
     visualize_dataset(data.trainX, data.trainY, data.testX, data.testY, 'Normal 0.5')
     model = Model()
@@ -18,3 +19,10 @@ if __name__ == '__main__':
     # print(data.trainX)
     # print(model.transform_data)
     # print(model.params[0]['val'])
+
+
+if __name__ == '__main__':
+
+    dataset = DataPrep.collect_fisher_dataset()
+
+

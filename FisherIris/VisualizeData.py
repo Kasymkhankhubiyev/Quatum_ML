@@ -22,13 +22,16 @@ def visualize_dataset(dataset: Dataset) -> None:
                                        'o', label='test_class {}'.format(k), color=test_colors[k]
                                        )
 
-                axs[i % 4, j % 4].legend(fontsize=7,
+                axs[i % 4, j % 4].legend(fontsize=5,
                                          ncol=1,
                                          facecolor='oldlace',
                                          edgecolor='r'
                                          )
 
-    fig.set_size_inches(18.5, 10.5)
+                # axs[i % 4, j % 4].set_xlim(-1, 10)
+                # axs[i % 4, j % 4].set_ylim(-1, 10)
+
+    fig.set_size_inches(10., 6.5)
     plt.savefig('FisherIris/dataset_visualization.png')
 
     def visualize_transformed_data(data):
