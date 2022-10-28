@@ -1,5 +1,5 @@
 """
-Multiclass classification with the Fisher Iris dataset
+Multiclass classification with the FisherIris dataset
 """
 import strawberryfields as sf
 from strawberryfields import ops
@@ -19,3 +19,9 @@ class Model:
     def __init__(self) -> None:
         self.lr, self.steps = None, None
         self.params = None
+
+    def predict(self) -> None:
+        pass
+
+    def train(self) -> None:
+        pass
