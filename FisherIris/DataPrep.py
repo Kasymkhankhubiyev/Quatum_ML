@@ -33,25 +33,27 @@ def collect_fisher_dataset() -> Dataset:
     VisualizeData.visualize_dataset(Dataset(trainX=np.array(trainX), trainY=np.array(trainY),
                    testX=np.array(testX), testY=np.array(testY)))
 
+    Y = []
     for i in range(len(trainY)):
-        if trainY[i] == 1:
-            trainY[i] = [1, 0, 0]
+        if trainY[i] == 0:
+            Y.append([1, 0, 0])
+        elif trainY[i] == 1:
+            Y.append([0, 1, 0])
         elif trainY[i] == 2:
-            trainY[i] = [0, 1, 0]
-        elif trainY[i] == 3:
-            trainY[i] = [0, 0, 1]
+            Y.append([0, 0, 1])
 
+    trainY = Y
+
+    Y = []
     for i in range(len(testY)):
-        if testY[i] == 1:
-            testY[i] = [1, 0, 0]
+        if testY[i] == 0:
+            Y.append([1, 0, 0])
+        elif testY[i] == 1:
+            Y.append([0, 1, 0])
         elif testY[i] == 2:
-            testY[i] = [0, 1, 0]
-        elif testY[i] == 3:
-            testY[i] = [0, 0, 1]
+            Y.append([0, 0, 1])
 
-
+    testY = Y
 
     return Dataset(trainX=np.array(trainX), trainY=np.array(trainY),
                    testX=np.array(testX), testY=np.array(testY))
-
-

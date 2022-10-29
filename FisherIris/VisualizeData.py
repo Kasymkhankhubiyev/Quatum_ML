@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from FisherIris.DataPrep import Dataset
+# from FisherIris.DataPrep import Dataset
 
 
-def visualize_dataset(dataset: Dataset) -> None:
+def visualize_dataset(dataset) -> None:
     fig, axs = plt.subplots(nrows=4, ncols=4)
 
     colors = ['red', 'blue', 'green']

@@ -17,13 +17,14 @@ class Model:
 
     def __init__(self) -> None:
         self.lr, self.steps, self.squeeze_param, self.learner = None, None, None, None
-        self.params = [make_param(name = 'param' + str(i), constant=.5) for i in range(46)]
+        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(46)]
 
-    def predict(self) -> None:
-        pass
+    def predict(self, data_to_predict) -> list:
+        outcomes = self.learner.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
+        predictions = outcomes['predictions']
+        return predictions
 
     def _circuit(self, X, params):
-        # prog = sf.Program(2)
 
         def single_input_circuit(x):
             modes = 4
@@ -31,48 +32,44 @@ class Model:
             squeezing_amount = self.squeeze_param
 
             with prog.context as q:
-                # ops.Dgate(x[0], 0.) | q[0]
-                # ops.Dgate(x[1], 0.) | q[1]
-                # ops.Dgate(x[2], 0.) | q[2]
-                # ops.Dgate(x[3], 0.) | q[3]
                 ops.Sgate(squeezing_amount, x[0]) | q[0]
                 ops.Sgate(squeezing_amount, x[1]) | q[1]
                 ops.Sgate(squeezing_amount, x[2]) | q[2]
                 ops.Sgate(squeezing_amount, x[3]) | q[3]
-                ops.BSgate(self.params[0], self.params[1]) | (q[0], q[1])
-                ops.BSgate(self.params[2], self.params[3]) | (q[2], q[3])
-                ops.BSgate(self.params[4], self.params[5]) | (q[1], q[2])
-                ops.BSgate(self.params[6], self.params[7]) | (q[0], q[1])
-                ops.BSgate(self.params[9], self.params[8]) | (q[2], q[3])
-                ops.BSgate(self.params[10], self.params[11]) | (q[1], q[2])
-                ops.Rgate(self.params[12]) | q[0]
-                ops.Rgate(self.params[13]) | q[1]
-                ops.Rgate(self.params[14]) | q[2]
-                ops.Sgate(self.params[15]) | q[0]
-                ops.Sgate(self.params[16]) | q[1]
-                ops.Sgate(self.params[17]) | q[2]
-                ops.Sgate(self.params[18]) | q[3]
-                ops.BSgate(self.params[19], self.params[20]) | (q[0], q[1])
-                ops.BSgate(self.params[21], self.params[22]) | (q[2], q[3])
-                ops.BSgate(self.params[23], self.params[24]) | (q[1], q[2])
-                ops.BSgate(self.params[25], self.params[26]) | (q[0], q[1])
-                ops.BSgate(self.params[27], self.params[28]) | (q[2], q[3])
-                ops.BSgate(self.params[29], self.params[30]) | (q[1], q[2])
-                ops.Rgate(self.params[31]) | q[0]
-                ops.Rgate(self.params[32]) | q[1]
-                ops.Rgate(self.params[33]) | q[2]
-                ops.Dgate(self.params[34]) | q[0]
-                ops.Dgate(self.params[35]) | q[1]
-                ops.Dgate(self.params[36]) | q[2]
-                ops.Dgate(self.params[37]) | q[3]
-                ops.Pgate(self.params[38]) | q[0]
-                ops.Pgate(self.params[39]) | q[1]
-                ops.Pgate(self.params[40]) | q[2]
-                ops.Pgate(self.params[41]) | q[3]
-                ops.Kgate(self.params[42]) | q[0]
-                ops.Kgate(self.params[43]) | q[1]
-                ops.Kgate(self.params[44]) | q[2]
-                ops.Kgate(self.params[45]) | q[3]
+                ops.BSgate(params[0], params[1]) | (q[0], q[1])
+                ops.BSgate(params[2], params[3]) | (q[2], q[3])
+                ops.BSgate(params[4], params[5]) | (q[1], q[2])
+                ops.BSgate(params[6], params[7]) | (q[0], q[1])
+                ops.BSgate(params[9], params[8]) | (q[2], q[3])
+                ops.BSgate(params[10], params[11]) | (q[1], q[2])
+                ops.Rgate(params[12]) | q[0]
+                ops.Rgate(params[13]) | q[1]
+                ops.Rgate(params[14]) | q[2]
+                ops.Sgate(params[15]) | q[0]
+                ops.Sgate(params[16]) | q[1]
+                ops.Sgate(params[17]) | q[2]
+                ops.Sgate(params[18]) | q[3]
+                ops.BSgate(params[19], params[20]) | (q[0], q[1])
+                ops.BSgate(params[21], params[22]) | (q[2], q[3])
+                ops.BSgate(params[23], params[24]) | (q[1], q[2])
+                ops.BSgate(params[25], params[26]) | (q[0], q[1])
+                ops.BSgate(params[27], params[28]) | (q[2], q[3])
+                ops.BSgate(params[29], params[30]) | (q[1], q[2])
+                ops.Rgate(params[31]) | q[0]
+                ops.Rgate(params[32]) | q[1]
+                ops.Rgate(params[33]) | q[2]
+                ops.Dgate(params[34]) | q[0]
+                ops.Dgate(params[35]) | q[1]
+                ops.Dgate(params[36]) | q[2]
+                ops.Dgate(params[37]) | q[3]
+                ops.Pgate(params[38]) | q[0]
+                ops.Pgate(params[39]) | q[1]
+                ops.Pgate(params[40]) | q[2]
+                ops.Pgate(params[41]) | q[3]
+                ops.Kgate(params[42]) | q[0]
+                ops.Kgate(params[43]) | q[1]
+                ops.Kgate(params[44]) | q[2]
+                ops.Kgate(params[45]) | q[3]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
 
@@ -90,13 +87,8 @@ class Model:
             p2 = state.fock_prob(ei)
             ei[2] = 0
 
-            # print('probobilitis:      ')
-            # print(p0, p1, p2)
-
             normalization = p0 + p1 + p2 + 1e-10
             output = [p0 / normalization, p1 / normalization, p2 / normalization]
-            # print('predictions:   ')
-            # print(output)
 
             return output
 
@@ -105,9 +97,7 @@ class Model:
         return np.array(circuit_output)
 
     def _myloss(self, circuit_output, targets):
-        # return tf.losses.mean_squared_error(y_pred=circuit_output, y_true=targets)
-        # print(circuit_output)
-        # print(targets)
+
         return cross_entropy_with_softmax(outputs=circuit_output, targets=targets) / len(targets)
 
     def _outputs_to_predictions(self, circuit_output):
@@ -121,7 +111,7 @@ class Model:
             for i in range(len(self.params)):
                 file.write(str(self.params[i])+',')
 
-    def train(self, lr: learning_rate, sq: squeeze_rate, steps: int, trainX: np.array, trainY: np.array) -> None:
+    def train(self, lr: learning_rate, sq: squeeze_rate, steps: int, trainX: list, trainY: list) -> None:
 
         self.lr = lr
         self.squeeze_param = sq
@@ -139,3 +129,21 @@ class Model:
         self.learner = CircuitLearner(hyperparams=hyperparams)
 
         self.learner.train_circuit(X=trainX, Y=trainY, steps=steps)
+        self._upload_params()
+
+    def score_model(self, testX: np.array, testY: np.array) -> None:
+        test_score = self.learner.score_circuit(X=testX, Y=testY, outputs_to_predictions=self._outputs_to_predictions)
+        print("\nPossible scores to print: {}".format(list(test_score.keys())))
+        print("Accuracy on test set: {}".format(test_score['accuracy']))
+        print("Loss on test set: {}".format(test_score['loss']))
+
+        name = 'FisherIris/results.txt'
+        with open(name, 'a') as file:
+            file.write('results on ' + str(datetime.datetime.now()) + ' : \n')
+            file.write(f'squeezing parameter:    {self.squeeze_param}+\n')
+            file.write(f'learning rate:     {self.lr} \n')
+            file.write(f'steps:     {self.steps} \n')
+            for i in range(len(testY)):
+                file.write('x: ' + str(testX[i]) + ', y: ' + str(testY[i]) + '\n')
+            file.write("Accuracy on test set: {}".format(test_score['accuracy']) + '\n')
+            file.write("Loss on test set: {}".format(test_score['loss']) + '\n\n\n')
