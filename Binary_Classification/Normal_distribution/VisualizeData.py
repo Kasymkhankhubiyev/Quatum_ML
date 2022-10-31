@@ -29,74 +29,44 @@ def visualize_data(arrayX, arrayY, name: str) -> None:
     plt.savefig('Binary_Classification/Normal_distribution/' + name + '_transformed_data_set.png')
     plt.close()
 
-def plot_double_cake_data(X, Y, ax, num_sectors=None):
-    """Plot double cake data and corresponding sectors."""
-    x, y = X.T
-    cmap = mpl.colors.ListedColormap(["#FF0000", "#0000FF"])
-    ax.scatter(x, y, c=Y, cmap=cmap, s=25, marker="s")
 
-    if num_sectors is not None:
-        sector_angle = 360 / num_sectors
-        for i in range(num_sectors):
-            color = ["#FF0000", "#0000FF"][(i % 2)]
-            other_color = ["#FF0000", "#0000FF"][((i + 1) % 2)]
-            ax.add_artist(
-                mpl.patches.Wedge(
-                    (0, 0),
-                    1,
-                    i * sector_angle,
-                    (i + 1) * sector_angle,
-                    lw=0,
-                    color=color,
-                    alpha=0.1,
-                    width=0.5,
-                )
-            )
-            ax.add_artist(
-                mpl.patches.Wedge(
-                    (0, 0),
-                    0.5,
-                    i * sector_angle,
-                    (i + 1) * sector_angle,
-                    lw=0,
-                    color=other_color,
-                    alpha=0.1,
-                )
-            )
-            ax.set_xlim(-1, 1)
-
-    ax.set_ylim(-1, 1)
-    ax.set_aspect("equal")
-    ax.axis("off")
-
-    return ax
-
-def draw_decision_boundary(model, N_gridpoints=14) -> None:
+def draw_decision_boundary(model, arrayX, arrayY, N_gridpoints=14) -> None:
 
     #разбиваем область на точки
     _xx, _yy = np.linspace(-4, 4, N_gridpoints), np.linspace(-4, 4, N_gridpoints)
 
     _zz = np.zeros_like(_xx)
 
-    points = [[_xx[i], _yy[i]] for i in range(len(_xx))]
+    # points = np.array([[_xx[i], _yy[i]] for i in range(len(_xx))])
 
-    for idx in np.ndindex(*_xx.shape):
-        _zz[idx] = model.predict(points)
+    points = []
+    for i in range(N_gridpoints):
+        for j in range(N_gridpoints):
+            points.append([_xx[i], _yy[j]])
 
-    # plot_data = {"_xx": _xx, "_yy": _yy, "_zz": _zz}
-    # ax.contourf(
-    #     _xx,
-    #     _yy,
-    #     _zz,
-    #     cmap=mpl.colors.ListedColormap(["#FF0000", "#0000FF"]),
-    #     alpha=0.2,
-    #     levels=[-1, 0, 1],
-    # )
+    _zz = model.predict(points)
+
+    _zz = [_zz[i] for i in range(len(_zz))]
 
     colors = ['pink', 'purple']
 
-    for k in np.unique(_zz):
-        plt.scatter(x = _xx[_zz == k], y = _yy[_zz == k], s=30, c=colors[k])
+    # for k in np.unique(_zz):
+    #     plt.scatter(x=points[_zz == k][0], y=points[_zz == k][1], s=30, c=colors[k])
+    for i in range(len(points)):
+        if _zz[i] == 1:
+            plt.scatter(x=points[i][0], y=points[i][1], s=150, c=colors[0], marker='s')
+        elif _zz[i] == 0:
+            plt.scatter(x=points[i][0], y=points[i][1], s=150, c=colors[1], marker='s')
+
+    colors = ['red', 'yellow']
+
+    for i in range(len(arrayX)):
+        if arrayY[i] == 1:
+            plt.plot(arrayX[i][0], arrayX[i][1], 'o', color=colors[0])
+        elif arrayY[i] == 0:
+            plt.plot(arrayX[i][0], arrayX[i][1], 'o', color=colors[1])
+    # for k in np.unique(arrayY):
+    #     plt.plot(arrayX[arrayY == k, 0], arrayX[arrayY == k, 1], 'o', label='class {}'.format(k), color=colors[k])
 
     name = 'decision_boundary_test_plot'
 

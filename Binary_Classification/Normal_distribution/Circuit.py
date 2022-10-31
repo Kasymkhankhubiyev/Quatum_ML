@@ -71,10 +71,11 @@ class Model:
 
     def _upload_params(self):
         name = 'Binary_Classification/Normal_distribution/params_on_'+ \
-            (datetime.datetime.strftime(datetime.datetime.now(), "%Y_%m_%d_%H_M"))+'.txt'
-        with open(name, 'w') as file:
+            (datetime.datetime.strftime(datetime.datetime.now(), "%Y_%m_%d"))+'.txt'
+        with open(name, 'a') as file:
             for i in range(len(self.params)):
                 file.write(str(self.params[i])+',')
+                file.write('\n\n\n')
 
     def train(self, lr: float, steps: int, sq: squeeze, trainX, trainY) -> None:
         self.squeeze_param = sq
