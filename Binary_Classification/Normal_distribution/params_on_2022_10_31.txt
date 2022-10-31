@@ -1,0 +1,81 @@
+{'name': 'phi0', 'val': 0.6635408558556418, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi1', 'val': 0.874435813821685, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi2', 'val': 0.8545266590162438, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi3', 'val': 0.6912811405241862, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi4', 'val': 0.6619750821179374, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi5', 'val': 0.7000000000728583, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi6', 'val': 0.6999999999708566, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi7', 'val': 0.7053347114370292, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi8', 'val': 0.7, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi0', 'val': 0.6635408556516383, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi1', 'val': 0.8744358135156798, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi2', 'val': 0.8545266586665236, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi3', 'val': 0.6912811403493261, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi4', 'val': 0.6619750817682172, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi5', 'val': 0.6999999999271416, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi6', 'val': 0.6999999999562849, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi7', 'val': 0.7053347112475974, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi8', 'val': 0.7, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi0', 'val': 0.7120669740446414, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi1', 'val': 1.0873229360653733, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi2', 'val': 1.06690612091275, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi3', 'val': 0.7128951697732816, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi4', 'val': 0.440445515372008, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi5', 'val': 0.6999999999271416, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi6', 'val': 0.7000000000291433, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi7', 'val': 0.7640809176536861, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi8', 'val': 0.7, 'regul': False, 'monitor': False},
+
+
