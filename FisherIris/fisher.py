@@ -15,9 +15,11 @@ learning_rate = float
 
 class Model:
 
-    def __init__(self) -> None:
+    def __init__(self, params=None) -> None:
         self.lr, self.steps, self.squeeze_param, self.learner = None, None, None, None
-        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(46)]
+        self.params = params
+        if params is None:
+            self.params = [make_param(name='param' + str(i), constant=.5) for i in range(46)]
 
     def predict(self, data_to_predict) -> list:
         outcomes = self.learner.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
@@ -107,9 +109,11 @@ class Model:
 
     def _upload_params(self):
         name = 'FisherIris/params_on_'+(datetime.datetime.strftime(datetime.datetime.now(), "%Y_%m_%d_%H_M"))+'.txt'
-        with open(name, 'w') as file:
+        with open(name, 'a') as file:
+            file.write('FisherIris/params_on_'+(datetime.datetime.strftime(datetime.datetime.now()))+'\n\n')
             for i in range(len(self.params)):
                 file.write(str(self.params[i])+',')
+            file.write('\n\n\n')
 
     def train(self, lr: learning_rate, sq: squeeze_rate, steps: int, trainX: list, trainY: list) -> None:
 

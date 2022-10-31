@@ -34,5 +34,6 @@ def visualize_dataset(dataset) -> None:
     fig.set_size_inches(10., 6.5)
     plt.savefig('FisherIris/dataset_visualization.png')
 
-    def visualize_transformed_data(data):
-        pass
+
+def draw_decision_boundary() -> None:
+    pass
