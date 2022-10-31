@@ -79,3 +79,111 @@
 {'name': 'phi8', 'val': 0.7, 'regul': False, 'monitor': False},
 
 
+{'name': 'phi0', 'val': 0.7923505145454336, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi1', 'val': 1.1851471458241931, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi2', 'val': 1.1613766629624624, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi3', 'val': 0.711344922383146, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi4', 'val': 0.2476068485453934, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi5', 'val': 0.6999999999444888, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi6', 'val': 0.70000000006245, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi7', 'val': 0.7902318079603204, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi8', 'val': 0.7, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi0', 'val': 0.7923505149201339, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi1', 'val': 1.185147146087871, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi2', 'val': 1.161376663184507, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi3', 'val': 0.711344922383146, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi4', 'val': 0.24760684856621007, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi5', 'val': 0.7000000000416333, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi6', 'val': 0.6999999998959165, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi7', 'val': 0.7902318078770537, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi8', 'val': 0.7, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi0', 'val': 1.1739080642758872, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi1', 'val': 1.3612770482027372, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi2', 'val': 1.3023656695543921, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi3', 'val': 0.8969693799118693, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi4', 'val': -0.13163892768846178, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi5', 'val': 0.6999999999097943, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi6', 'val': 0.6999999999236721, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi7', 'val': 0.665076853126638, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi8', 'val': 0.7, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi0', 'val': 1.296915499370868, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi1', 'val': 1.467822066179853, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi2', 'val': 1.3940382283381105, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi3', 'val': 1.104631808423922, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi4', 'val': -0.31877403985044367, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi5', 'val': 0.6999999999653055, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi6', 'val': 0.7000000000277555, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi7', 'val': 0.54726910650263, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi8', 'val': 0.7, 'regul': False, 'monitor': False},
+
+

@@ -30,7 +30,7 @@ def visualize_data(arrayX, arrayY, name: str) -> None:
     plt.close()
 
 
-def draw_decision_boundary(model, arrayX, arrayY, N_gridpoints=14) -> None:
+def draw_decision_boundary(model, arrayX, arrayY, name: str, N_gridpoints=14) -> None:
 
     #разбиваем область на точки
     _xx, _yy = np.linspace(-4, 4, N_gridpoints), np.linspace(-4, 4, N_gridpoints)
@@ -53,22 +53,22 @@ def draw_decision_boundary(model, arrayX, arrayY, N_gridpoints=14) -> None:
     # for k in np.unique(_zz):
     #     plt.scatter(x=points[_zz == k][0], y=points[_zz == k][1], s=30, c=colors[k])
     for i in range(len(points)):
-        if _zz[i] == 1:
+        if _zz[i] == 0:
             plt.scatter(x=points[i][0], y=points[i][1], s=150, c=colors[0], marker='s')
-        elif _zz[i] == 0:
+        elif _zz[i] == 1:
             plt.scatter(x=points[i][0], y=points[i][1], s=150, c=colors[1], marker='s')
 
     colors = ['red', 'yellow']
 
-    for i in range(len(arrayX)):
-        if arrayY[i] == 1:
-            plt.plot(arrayX[i][0], arrayX[i][1], 'o', color=colors[0])
-        elif arrayY[i] == 0:
-            plt.plot(arrayX[i][0], arrayX[i][1], 'o', color=colors[1])
-    # for k in np.unique(arrayY):
-    #     plt.plot(arrayX[arrayY == k, 0], arrayX[arrayY == k, 1], 'o', label='class {}'.format(k), color=colors[k])
+    # for i in range(len(arrayX)):
+    #     if arrayY[i] == 1:
+    #         plt.plot(arrayX[i][0], arrayX[i][1], 'o', color=colors[0])
+    #     elif arrayY[i] == 0:
+    #         plt.plot(arrayX[i][0], arrayX[i][1], 'o', color=colors[1])
+    for k in np.unique(arrayY):
+        plt.plot(arrayX[arrayY == k, 0], arrayX[arrayY == k, 1], 'o', label='class {}'.format(k), color=colors[k])
 
-    name = 'decision_boundary_test_plot'
+    # name = 'decision_boundary_test_plot'
 
     plt.legend(fontsize=7, ncol=1, facecolor='oldlace', edgecolor='r')
     plt.title(name)

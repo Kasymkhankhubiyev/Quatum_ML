@@ -138,12 +138,6 @@ class Model:
                 ops.Kgate(self.params[5]['val']) | q[0]
                 ops.Kgate(self.params[6]['val']) | q[1]
 
-                # ops.MeasureFock() | q[0]
-                # ops.MeasureFock() | q[1]
-                #
-                # ops.m | q[0]
-                # ops.MeasureX() | q[1]
-
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             eng.run(prog)
 
@@ -152,7 +146,7 @@ class Model:
         print(transform_data)
         return np.array(transform_data)
 
-    def project_data_onto_CV(self, arrX, arrY, name = None):
+    def project_data_onto_CV(self, arrX, arrY, name=None):
         print(self.params)
         new_x = self._project_data(data=arrX)
         c_name = 'measurement'
