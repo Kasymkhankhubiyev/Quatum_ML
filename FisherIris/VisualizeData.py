@@ -64,28 +64,38 @@ def draw_decision_boundary(model, arrX, arrY, name: str, N_gridpoints=14) -> Non
 
     for i in range(4):
         for j in range(4):
+            fig, axs = plt.subplots(nrows=1, ncols=2)
             for k in range(len(_zz)):
-
-                fig, axs = plt.subplots(nrows=1, ncols=2)
-
                 if _zz[k] == 0:
-                    axs[0].scatter(x=predictions[k][i], y=predictions[k][j], s=30, c=test_colors[0], marker='s')
+                    axs[0].scatter(x=predictions[k][i], y=predictions[k][j], s=130, c=test_colors[0], marker='s')
                 elif _zz[k] == 1:
-                    axs[0].scatter(x=predictions[k][i], y=predictions[k][j], s=30, c=test_colors[1], marker='s')
+                    axs[0].scatter(x=predictions[k][i], y=predictions[k][j], s=130, c=test_colors[1], marker='s')
                 elif _zz[k] == 2:
-                    axs[0].scatter(x=predictions[k][i], y=predictions[k][j], s=30, c=test_colors[2], marker='s')
+                    axs[0].scatter(x=predictions[k][i], y=predictions[k][j], s=130, c=test_colors[2], marker='s')
 
-                index, = np.where(arrY[k] == 1)
-                if index == 0:
-                    axs[1].plot(arrX[k][i], arrX[k][j], color=colors[0])
-                elif index == 1:
-                    axs[1].plot(arrX[k][i], arrX[k][j], color=colors[1])
-                elif index == 2:
-                    axs[1].plot(arrX[k][i], arrX[k][j], color=colors[2])
+            for k in np.unique(arrY):
+                axs[1].plot(arrX[arrY == k, i],
+                                       arrX[arrY == k, j],
+                                       'o', label='class {}'.format(k), color=colors[k]
+                                       )
 
-                plt.title(f'f{i} vs f{j}')
-                plt.savefig('FisherIris/decision_boundary_'+str(i)+'vs'+str(j)+'_'+str(N_gridpoints)+'.png')
-                plt.close(fig)
+                axs[1].legend(fontsize=5,
+                                         ncol=1,
+                                         facecolor='oldlace',
+                                         edgecolor='r'
+                                         )
+
+                # index, = np.where(arrY[k] == 1)
+                # if index == 0:
+                #     axs[1].plot(arrX[k][i], arrX[k][j], color=colors[0])
+                # elif index == 1:
+                #     axs[1].plot(arrX[k][i], arrX[k][j], color=colors[1])
+                # elif index == 2:
+                #     axs[1].plot(arrX[k][i], arrX[k][j], color=colors[2])
+
+            plt.title(f'f{i} vs f{j}')
+            plt.savefig('FisherIris/decision_boundary_' + str(i) + 'vs' + str(j) + '_' + str(N_gridpoints) + '.png')
+            plt.close(fig)
 
     # for i in range(4):
     #     for j in range(4):
@@ -99,6 +109,6 @@ def draw_decision_boundary(model, arrX, arrY, name: str, N_gridpoints=14) -> Non
     #                 axs[i % 4, j % 4].plot(arrX[k][i], arrX[k][j], color=colors[2])
 
     # fig.set_size_inches(10., 6.5)
-    plt.savefig('FisherIris/decision_boundary'+str(N_gridpoints)+'.png')
+    # plt.savefig('FisherIris/decision_boundary'+str(N_gridpoints)+'.png')
 
 

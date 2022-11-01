@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     # run_binary()
     params = ParamsParcers.parce_params(file_name='FisherIris/params_on_2022_10_29_22_M.txt')
-    dataset = DataPrep.collect_fisher_dataset()
+    trainX, trainY = DataPrep.collect_data_fisher_for_decision_boundary()
     model = FisherIris.fisher.Model(params=params)
 
-    VisualizeData.draw_decision_boundary(model=model, arrX=dataset.trainX, arrY=dataset.trainY, N_gridpoints=10, name='Fisher')
+    VisualizeData.draw_decision_boundary(model=model, arrX=trainX, arrY=trainY, N_gridpoints=10, name='Fisher')
