@@ -60,7 +60,7 @@ def draw_decision_boundary(model, arrX, arrY, name: str, N_gridpoints=14) -> Non
         _zz[i] = index
 
     colors = ['red', 'blue', 'green']
-    test_colors = ['pink', 'SteelBlue', 'yellow']
+    test_colors = ['pink', 'SteelBlue', 'yellow']  # 0 pink, # SteelBlue, # yellow
 
     for i in range(4):
         for j in range(4):

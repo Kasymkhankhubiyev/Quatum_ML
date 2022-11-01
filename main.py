@@ -8,6 +8,7 @@ import FisherIris.fisher
 from FisherIris import ParamsParcers
 from FisherIris import VisualizeData
 
+
 def run_binary() -> None:
     data = create_data_set(100, .5)
     visualize_dataset(data.trainX, data.trainY, data.testX, data.testY, 'Normal 0.5')
@@ -20,6 +21,7 @@ def run_binary() -> None:
     model.predict(data_to_predict=data.testX)
 
     draw_decision_boundary(model=model, N_gridpoints=20, arrayX=data.trainX, arrayY=data.trainY, name='intersect_0_5')
+
 
 def run_fisher() -> None:
     dataset = DataPrep.collect_fisher_dataset()
