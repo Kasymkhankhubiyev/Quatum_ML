@@ -17,9 +17,22 @@ class Model:
 
     def __init__(self, params=None) -> None:
         self.lr, self.steps, self.squeeze_param, self.learner = None, None, None, None
-        self.params = params
-        if params is None:
-            self.params = [make_param(name='param' + str(i), constant=.5) for i in range(46)]
+        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(46)]
+        if params is not None:
+            self.params = [make_param(name='param' + str(i), constant=params[i]) for i in range(46)]
+            self.squeeze_param = 0.175
+            hyperparams = {'circuit': self._circuit,
+                           'init_circuit_params': self.params,
+                           'task': 'supervised',
+                           'loss': self._myloss,
+                           'optimizer': 'SGD',
+                           'init_learning_rate': self.lr,
+                           # 'decay': 0.01,
+                           'log_every': 1,
+                           'warm_start': False
+                           }
+
+            self.learner = CircuitLearner(hyperparams=hyperparams)
 
     def predict(self, data_to_predict) -> list:
         outcomes = self.learner.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)

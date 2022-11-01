@@ -5,6 +5,8 @@ from Binary_Classification.Normal_distribution import Circuit
 from FisherIris import DataPrep
 # from FisherIris import VisualizeData
 import FisherIris.fisher
+from FisherIris import ParamsParcers
+from FisherIris import VisualizeData
 
 def run_binary() -> None:
     data = create_data_set(100, .5)
@@ -34,4 +36,9 @@ def run_fisher() -> None:
 
 if __name__ == '__main__':
 
-    run_binary()
+    # run_binary()
+    params = ParamsParcers.parce_params(file_name='FisherIris/params_on_2022_10_29_22_M.txt')
+    dataset = DataPrep.collect_fisher_dataset()
+    model = FisherIris.fisher.Model(params=params)
+
+    VisualizeData.draw_decision_boundary(model=model, arrX=dataset.trainX, arrY=dataset.trainY, N_gridpoints=10, name='Fisher')
