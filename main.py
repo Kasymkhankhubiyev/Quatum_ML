@@ -1,9 +1,10 @@
 from Binary_Classification.Normal_distribution.DataPreparation import *
 from Binary_Classification.Normal_distribution.VisualizeData import *
 from Binary_Classification.Normal_distribution import Circuit
+from NormalMultyClassClassification import runfile
 
 from FisherIris import DataPrep
-# from FisherIris import VisualizeData
+from FisherIris import VisualizeData
 import FisherIris.fisher
 from FisherIris import ParamsParcers
 from FisherIris import VisualizeData
@@ -36,11 +37,15 @@ def run_fisher() -> None:
     model.predict(data_to_predict=dataset.testX)
 
 
-if __name__ == '__main__':
-
-    # run_binary()
+def run_fisher_decision_bound() -> None:
     params = ParamsParcers.parce_params(file_name='FisherIris/params_on_2022_10_29_22_M.txt')
     trainX, trainY = DataPrep.collect_data_fisher_for_decision_boundary()
     model = FisherIris.fisher.Model(params=params)
 
     VisualizeData.draw_decision_boundary(model=model, arrX=trainX, arrY=trainY, N_gridpoints=10, name='Fisher')
+
+
+if __name__ == '__main__':
+
+    runfile.run()
+
