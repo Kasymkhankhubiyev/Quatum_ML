@@ -1,8 +1,5 @@
 import matplotlib.pyplot as plt
-# from sklearn.linear_model import LogisticRegression
-import matplotlib as mpl
 import numpy as np
-# from Circuit import Model
 
 
 def visualize_dataset(trainX, trainY, testX, testY, name: str) -> None:
