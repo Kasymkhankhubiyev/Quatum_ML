@@ -149,13 +149,13 @@ class Model:
         train_x = np.vstack((dataset.trainX_2, dataset.trainX_0, dataset.trainX_1, dataset.trainX_3))
         train_y = np.hstack([[0] * (len(dataset.trainX_2)),
                              [1] * (len(dataset.trainX_1) + len(dataset.trainX_2) + len(dataset.trainX_3))])
-        self._train_first_vs_all(lr=lr, trainX=train_x, trainY=train_y, steps=steps)
+        self._train_third_vs_all(lr=lr, trainX=train_x, trainY=train_y, steps=steps)
 
         # 3 class vs all
         train_x = np.vstack((dataset.trainX_3, dataset.trainX_0, dataset.trainX_1, dataset.trainX_2))
         train_y = np.hstack([[0] * (len(dataset.trainX_3)),
                              [1] * (len(dataset.trainX_1) + len(dataset.trainX_2) + len(dataset.trainX_3))])
-        self._train_first_vs_all(lr=lr, trainX=train_x, trainY=train_y, steps=steps)
+        self._train_fourth_vs_all(lr=lr, trainX=train_x, trainY=train_y, steps=steps)
 
     def _predict_class(self, data_to_predict):
         outcomes = self.learner0.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
@@ -170,9 +170,10 @@ class Model:
         outcomes = self.learner3.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
         prediction3 = outcomes['predictions']
 
-        predictions = np.array(prediction0) + np.array(prediction1) + np.array(prediction2) + np.array(prediction3)
-        predict = [np.where(prediction==1)[0] for prediction in predictions]
-        return predict
+        predictions = np.vstack(np.array(prediction0).T, np.array(prediction1).T,
+                                np.array(prediction2).T, np.array(prediction3).T)
+        # predict = [np.where(prediction==1)[0] for prediction in predictions]
+        return predictions
 
     def predict(self, data_to_predict):
         predictions = self._predict_class(data_to_predict)
