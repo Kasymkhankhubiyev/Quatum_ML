@@ -55,8 +55,6 @@ class Model:
             normalization = p0 + p1 + 1e-10
             output = p1 / normalization
 
-            self.transform_data.append([q[0].val, q[1].val])
-
             return output
 
         circuit_output = [single_input_circuit(x) for x in X]
@@ -141,9 +139,6 @@ class Model:
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             eng.run(prog)
 
-            transform_data.append([q[0].val[0], q[1].val[0]])
-
-        print(transform_data)
         return np.array(transform_data)
 
     def project_data_onto_CV(self, arrX, arrY, name=None):
