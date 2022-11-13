@@ -1,0 +1,414 @@
+{'name': 'param0', 'val': 0.6133234346329556, 'regul': False, 'monitor': False},
+
+
+{'name': 'param1', 'val': 1.1807257410995464, 'regul': False, 'monitor': False},
+
+
+{'name': 'param2', 'val': 1.2074478922473828, 'regul': False, 'monitor': False},
+
+
+{'name': 'param3', 'val': 0.557367619991478, 'regul': False, 'monitor': False},
+
+
+{'name': 'param4', 'val': 0.8635393332930105, 'regul': False, 'monitor': False},
+
+
+{'name': 'param5', 'val': 0.5000000013322676, 'regul': False, 'monitor': False},
+
+
+{'name': 'param6', 'val': 0.5000000026645353, 'regul': False, 'monitor': False},
+
+
+{'name': 'param7', 'val': 0.5369508184039835, 'regul': False, 'monitor': False},
+
+
+{'name': 'param8', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param9', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param10', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param11', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param12', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param13', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param14', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param15', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param16', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param17', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param18', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param19', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param20', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param21', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param22', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param23', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param24', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param25', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param26', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param27', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param28', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param29', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param30', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param31', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param32', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param33', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param34', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param35', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param36', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param37', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param38', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param39', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param40', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param41', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param42', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param43', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param44', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param45', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param0', 'val': 0.5037865577339224, 'regul': False, 'monitor': False},
+
+
+{'name': 'param1', 'val': 0.8002264450293878, 'regul': False, 'monitor': False},
+
+
+{'name': 'param2', 'val': 0.8907161820636332, 'regul': False, 'monitor': False},
+
+
+{'name': 'param3', 'val': 0.8391577898428542, 'regul': False, 'monitor': False},
+
+
+{'name': 'param4', 'val': 0.8033884796634267, 'regul': False, 'monitor': False},
+
+
+{'name': 'param5', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param6', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param7', 'val': 0.44781049128419603, 'regul': False, 'monitor': False},
+
+
+{'name': 'param8', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param9', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param10', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param11', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param12', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param13', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param14', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param15', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param16', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param17', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param18', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param19', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param20', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param21', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param22', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param23', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param24', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param25', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param26', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param27', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param28', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param29', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param30', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param31', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param32', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param33', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param34', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param35', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param36', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param37', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param38', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param39', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param40', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param41', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param42', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param43', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param44', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param45', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param0', 'val': 0.532974228679923, 'regul': False, 'monitor': False},
+
+
+{'name': 'param1', 'val': 0.9699803080024585, 'regul': False, 'monitor': False},
+
+
+{'name': 'param2', 'val': 0.8743312473547823, 'regul': False, 'monitor': False},
+
+
+{'name': 'param3', 'val': 0.5279043148616184, 'regul': False, 'monitor': False},
+
+
+{'name': 'param4', 'val': 0.7959831033514756, 'regul': False, 'monitor': False},
+
+
+{'name': 'param5', 'val': 0.49999999866773237, 'regul': False, 'monitor': False},
+
+
+{'name': 'param6', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param7', 'val': 0.4742483405278692, 'regul': False, 'monitor': False},
+
+
+{'name': 'param8', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param9', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param10', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param11', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param12', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param13', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param14', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param15', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param16', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param17', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param18', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param19', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param20', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param21', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param22', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param23', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param24', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param25', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param26', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param27', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param28', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param29', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param30', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param31', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param32', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param33', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param34', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param35', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param36', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param37', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param38', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param39', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param40', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param41', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param42', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param43', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param44', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
+{'name': 'param45', 'val': 0.5, 'regul': False, 'monitor': False},
+
+
