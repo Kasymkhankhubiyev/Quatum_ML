@@ -1,8 +1,7 @@
 from Binary_Classification.Normal_distribution.DataPreparation import *
 from Binary_Classification.Normal_distribution.VisualizeData import *
 from Binary_Classification.Normal_distribution import Circuit
-from NormalMultyClassClassification import runfile
-
+# from NormalMultyClassClassification import runfile
 from FisherIris import DataPrep
 from FisherIris import VisualizeData
 import FisherIris.fisher

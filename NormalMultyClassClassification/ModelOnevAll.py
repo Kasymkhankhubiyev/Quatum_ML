@@ -5,6 +5,7 @@ from qmlt.numerical import CircuitLearner
 from qmlt.numerical.helpers import make_param
 from qmlt.numerical.losses import square_loss
 import datetime
+from NormalMultyClassClassification.DataPrep import DataSet
 
 squeeze_rate = float
 learning_rate = float
@@ -75,7 +76,6 @@ class Model:
             file.write('\n\n\n')
 
     def _train_first_vs_all(self, lr, trainX, trainY, steps):
-
         hyperparams = {'circuit': self._circuit,
                        'init_circuit_params': self.params0,
                        'task': 'supervised',
@@ -88,24 +88,7 @@ class Model:
         self.learner0 = CircuitLearner(hyperparams=hyperparams)
         self.learner0.train_circuit(X=trainX, Y=trainY, steps=steps)
 
-    def _train_second_vs_all(self):
-        pass
-
-    def _train_third_vs_all(self):
-        pass
-
-    def _train_fourth_vs_all(self):
-        pass
-
-    def train(self, lr: learning_rate, steps: int, sq: squeeze_rate, trainX, trainY) -> None:
-        self.squeeze_param = sq
-        self.lr, self.steps = lr, steps
-
-        # 0 class vs all
-        train_x = trainX[np.where(trainY == 0)[0]]
-        self._train_first_vs_all(lr=lr, trainX=trainX, trainY=trainY, steps=steps)
-
-        # 1 class vs all
+    def _train_second_vs_all(self, lr, trainX, trainY, steps):
         hyperparams = {'circuit': self._circuit,
                        'init_circuit_params': self.params1,
                        'task': 'supervised',
@@ -118,7 +101,7 @@ class Model:
         self.learner1 = CircuitLearner(hyperparams=hyperparams)
         self.learner1.train_circuit(X=trainX, Y=trainY, steps=steps)
 
-        # 2 class vs all
+    def _train_third_vs_all(self, lr, trainX, trainY, steps):
         hyperparams = {'circuit': self._circuit,
                        'init_circuit_params': self.params2,
                        'task': 'supervised',
@@ -131,7 +114,7 @@ class Model:
         self.learner2 = CircuitLearner(hyperparams=hyperparams)
         self.learner2.train_circuit(X=trainX, Y=trainY, steps=steps)
 
-        # 3 class vs all
+    def _train_fourth_vs_all(self, lr, trainX, trainY, steps):
         hyperparams = {'circuit': self._circuit,
                        'init_circuit_params': self.params3,
                        'task': 'supervised',
@@ -146,27 +129,78 @@ class Model:
 
         self._upload_params()
 
-    def _predict_class(self):
-        pass
+    def train(self, lr: learning_rate, steps: int, sq: squeeze_rate, dataset: DataSet) -> None:
+        self.squeeze_param = sq
+        self.lr, self.steps = lr, steps
+
+        # 0 class vs all
+        train_x = np.vstack((dataset.trainX_0, dataset.trainX_1, dataset.trainX_2, dataset.trainX_3))
+        train_y = np.hstack([[0] * (len(dataset.trainX_0)),
+                             [1] * (len(dataset.trainX_1) + len(dataset.trainX_2) + len(dataset.trainX_3))])
+        self._train_first_vs_all(lr=lr, trainX=train_x, trainY=train_y, steps=steps)
+
+        # 1 class vs all
+        train_x = np.vstack((dataset.trainX_1, dataset.trainX_0, dataset.trainX_2, dataset.trainX_3))
+        train_y = np.hstack([[0] * (len(dataset.trainX_1)),
+                             [1] * (len(dataset.trainX_0) + len(dataset.trainX_2) + len(dataset.trainX_3))])
+        self._train_second_vs_all(lr=lr, trainX=train_x, trainY=train_y, steps=steps)
+
+        # 2 class vs all
+        train_x = np.vstack((dataset.trainX_2, dataset.trainX_0, dataset.trainX_1, dataset.trainX_3))
+        train_y = np.hstack([[0] * (len(dataset.trainX_2)),
+                             [1] * (len(dataset.trainX_1) + len(dataset.trainX_2) + len(dataset.trainX_3))])
+        self._train_first_vs_all(lr=lr, trainX=train_x, trainY=train_y, steps=steps)
+
+        # 3 class vs all
+        train_x = np.vstack((dataset.trainX_3, dataset.trainX_0, dataset.trainX_1, dataset.trainX_2))
+        train_y = np.hstack([[0] * (len(dataset.trainX_3)),
+                             [1] * (len(dataset.trainX_1) + len(dataset.trainX_2) + len(dataset.trainX_3))])
+        self._train_first_vs_all(lr=lr, trainX=train_x, trainY=train_y, steps=steps)
+
+    def _predict_class(self, data_to_predict):
+        outcomes = self.learner0.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
+        prediction0 = outcomes['predictions']
+
+        outcomes = self.learner1.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
+        prediction1 = outcomes['predictions']
+
+        outcomes = self.learner2.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
+        prediction2 = outcomes['predictions']
+
+        outcomes = self.learner3.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
+        prediction3 = outcomes['predictions']
+
+        predictions = np.array(prediction0) + np.array(prediction1) + np.array(prediction2) + np.array(prediction3)
+        predict = [np.where(prediction==1)[0] for prediction in predictions]
+        return predict
 
     def predict(self, data_to_predict):
-        outcomes = self.learner.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
-        predictions = outcomes['predictions']
+        predictions = self._predict_class(data_to_predict)
         return predictions
 
     def score_model(self, testX, testY):
-        test_score = self.learner.score_circuit(X=testX, Y=testY, outputs_to_predictions=self._outputs_to_predictions)
-        print("\nPossible scores to print: {}".format(list(test_score.keys())))
-        print("Accuracy on test set: {}".format(test_score['accuracy']))
-        print("Loss on test set: {}".format(test_score['loss']))
+        predictions = self._predict_class(testX)
+        counter = 0
+        for i in range(len(testY)):
+            if predictions[i] == testY[i]:
+                counter += 1
+        accuracy = counter/len(testY)
+        return accuracy
 
-        name = 'Binary_Classification/Normal_distribution/results.txt'
-        with open(name, 'a') as file:
-            file.write('results on '+str(datetime.datetime.now()) + ' : \n')
-            file.write(f'squeezing parameter:    {self.squeeze_param}+\n')
-            file.write(f'learning rate:     {self.lr} \n')
-            file.write(f'steps:     {self.steps} \n')
-            for i in range(len(testY)):
-                file.write('x: '+str(testX[i]) + ', y: '+str(testY[i]) + '\n')
-            file.write("Accuracy on test set: {}".format(test_score['accuracy']) + '\n')
-            file.write("Loss on test set: {}".format(test_score['loss']) + '\n\n\n')
+
+    # def score_model(self, testX, testY):
+    #     test_score = self.learner.score_circuit(X=testX, Y=testY, outputs_to_predictions=self._outputs_to_predictions)
+    #     print("\nPossible scores to print: {}".format(list(test_score.keys())))
+    #     print("Accuracy on test set: {}".format(test_score['accuracy']))
+    #     print("Loss on test set: {}".format(test_score['loss']))
+    #
+    #     name = 'Binary_Classification/Normal_distribution/results.txt'
+    #     with open(name, 'a') as file:
+    #         file.write('results on '+str(datetime.datetime.now()) + ' : \n')
+    #         file.write(f'squeezing parameter:    {self.squeeze_param}+\n')
+    #         file.write(f'learning rate:     {self.lr} \n')
+    #         file.write(f'steps:     {self.steps} \n')
+    #         for i in range(len(testY)):
+    #             file.write('x: '+str(testX[i]) + ', y: '+str(testY[i]) + '\n')
+    #         file.write("Accuracy on test set: {}".format(test_score['accuracy']) + '\n')
+    #         file.write("Loss on test set: {}".format(test_score['loss']) + '\n\n\n')
