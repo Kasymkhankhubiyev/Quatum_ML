@@ -141,15 +141,6 @@ class Model:
 
         return np.array(transform_data)
 
-    def project_data_onto_CV(self, arrX, arrY, name=None):
-        print(self.params)
-        new_x = self._project_data(data=arrX)
-        c_name = 'measurement'
-        if name is not None:
-            c_name = name
-        print(np.unique(new_x, return_counts=True, axis=0))
-        visualize_data(arrayX=new_x, arrayY=arrY, name=c_name)
-
 
 
 
