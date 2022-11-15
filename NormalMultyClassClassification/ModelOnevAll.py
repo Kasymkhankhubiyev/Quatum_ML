@@ -62,7 +62,7 @@ class Model:
         return round(circuit_output)
 
     def _upload_params(self):
-        name = 'Binary_Classification/Normal_distribution/params_on_'+ \
+        name = 'NormalMultyClassClassification/params_on_'+ \
             (datetime.datetime.strftime(datetime.datetime.now(), "%Y_%m_%d"))+'.txt'
         with open(name, 'a') as file:
             for i in range(len(self.params0)):
@@ -170,10 +170,11 @@ class Model:
         outcomes = self.learner3.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
         prediction3 = outcomes['predictions']
 
-        predictions = np.vstack(np.array(prediction0).T, np.array(prediction1).T,
-                                np.array(prediction2).T, np.array(prediction3).T)
-        # predict = [np.where(prediction==1)[0] for prediction in predictions]
-        return predictions
+        predictions = np.vstack((np.array(prediction0), np.array(prediction1),
+                                np.array(prediction2), np.array(prediction3)))
+        # print(predictions.T)
+        predict = [np.where(prediction==1)[0][0] for prediction in predictions.T]
+        return predict #predictions
 
     def predict(self, data_to_predict):
         predictions = self._predict_class(data_to_predict)
@@ -187,21 +188,3 @@ class Model:
                 counter += 1
         accuracy = counter/len(testY)
         return accuracy
-
-
-    # def score_model(self, testX, testY):
-    #     test_score = self.learner.score_circuit(X=testX, Y=testY, outputs_to_predictions=self._outputs_to_predictions)
-    #     print("\nPossible scores to print: {}".format(list(test_score.keys())))
-    #     print("Accuracy on test set: {}".format(test_score['accuracy']))
-    #     print("Loss on test set: {}".format(test_score['loss']))
-    #
-    #     name = 'Binary_Classification/Normal_distribution/results.txt'
-    #     with open(name, 'a') as file:
-    #         file.write('results on '+str(datetime.datetime.now()) + ' : \n')
-    #         file.write(f'squeezing parameter:    {self.squeeze_param}+\n')
-    #         file.write(f'learning rate:     {self.lr} \n')
-    #         file.write(f'steps:     {self.steps} \n')
-    #         for i in range(len(testY)):
-    #             file.write('x: '+str(testX[i]) + ', y: '+str(testY[i]) + '\n')
-    #         file.write("Accuracy on test set: {}".format(test_score['accuracy']) + '\n')
-    #         file.write("Loss on test set: {}".format(test_score['loss']) + '\n\n\n')
