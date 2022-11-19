@@ -15,10 +15,10 @@ class Model:
     def __init__(self) -> None:
         self.lr, self.steps, self.squeeze_param = None, None, None
         self.learner0, self.learner1, self.learner2, self.learner3 = None, None, None, None
-        self.params0 = [make_param(name='param' + str(i), constant=.5) for i in range(9)]
-        self.params1 = [make_param(name='param' + str(i), constant=.5) for i in range(9)]
-        self.params2 = [make_param(name='param' + str(i), constant=.5) for i in range(9)]
-        self.params3 = [make_param(name='param' + str(i), constant=.5) for i in range(9)]
+        self.params0 = [make_param(name='param' + str(i), constant=.7) for i in range(9)]
+        self.params1 = [make_param(name='param' + str(i), constant=.7) for i in range(9)]
+        self.params2 = [make_param(name='param' + str(i), constant=.7) for i in range(9)]
+        self.params3 = [make_param(name='param' + str(i), constant=.7) for i in range(9)]
 
     def _circuit(self, X, params):
 
@@ -35,8 +35,8 @@ class Model:
                 ops.Dgate(params[2]) | q[1]
                 ops.Pgate(params[3]) | q[0]
                 ops.Pgate(params[4]) | q[1]
-                ops.Kgate(params[5]) | q[0]
-                ops.Kgate(params[6]) | q[1]
+                # ops.Kgate(params[5]) | q[0]
+                # ops.Kgate(params[6]) | q[1]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
 
@@ -59,18 +59,21 @@ class Model:
         return square_loss(outputs=circuit_output, targets=targets) / len(targets)
 
     def _outputs_to_predictions(self, circuit_output):
-        return round(circuit_output)
+        return (circuit_output)
+        # return round(circuit_output)
 
     def _upload_params(self):
-        name = 'NormalMultyClassClassification/params_on_'+ \
-            (datetime.datetime.strftime(datetime.datetime.now(), "%Y_%m_%d"))+'.txt'
+        name = 'NormalMultyClassClassification/params.txt'
         with open(name, 'a') as file:
             for i in range(len(self.params0)):
                 file.write(str(self.params0[i])+',')
+            print('\n\n')
             for i in range(len(self.params1)):
                 file.write(str(self.params1[i])+',')
+            print('\n\n')
             for i in range(len(self.params2)):
                 file.write(str(self.params2[i])+',')
+            print('\n\n')
             for i in range(len(self.params3)):
                 file.write(str(self.params3[i])+',')
             file.write('\n\n\n')
@@ -173,8 +176,9 @@ class Model:
         predictions = np.vstack((np.array(prediction0), np.array(prediction1),
                                 np.array(prediction2), np.array(prediction3)))
         # print(predictions.T)
-        predict = [np.where(prediction==1)[0][0] for prediction in predictions.T]
-        return predict #predictions
+        predict = [np.argmax(prediction) for prediction in predictions.T]
+        print(predict)
+        return predict  # predictions
 
     def predict(self, data_to_predict):
         predictions = self._predict_class(data_to_predict)
