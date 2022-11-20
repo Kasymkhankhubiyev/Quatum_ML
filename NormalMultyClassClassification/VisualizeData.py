@@ -36,31 +36,27 @@ def plot_decision_boudary(model: Model, dataset: DataSet, N_gridpoints: int, nam
 
     colors = ['pink', 'purple', 'blue', 'red']
 
-    # for k in np.unique(_zz):
-    #     plt.scatter(x=points[_zz == k][0], y=points[_zz == k][1], s=30, c=colors[k])
     for i in range(len(points)):
         if _zz[i] == 0:
             plt.scatter(x=points[i][0], y=points[i][1], s=150, c=colors[0], marker='s')
         elif _zz[i] == 1:
             plt.scatter(x=points[i][0], y=points[i][1], s=150, c=colors[1], marker='s')
         elif _zz[i] == 2:
-            plt.scatter(x=points[i][0], y=points[i][1], s=150, c=colors[1], marker='s')
+            plt.scatter(x=points[i][0], y=points[i][1], s=150, c=colors[2], marker='s')
         elif _zz[i] == 3:
-            plt.scatter(x=points[i][0], y=points[i][1], s=150, c=colors[1], marker='s')
+            plt.scatter(x=points[i][0], y=points[i][1], s=150, c=colors[3], marker='s')
 
-    colors = ['red', 'yellow']
+    dataset_colors = ['green', 'yellow', 'black', 'orange']
 
-    # for i in range(len(arrayX)):
-    #     if arrayY[i] == 1:
-    #         plt.plot(arrayX[i][0], arrayX[i][1], 'o', color=colors[0])
-    #     elif arrayY[i] == 0:
-    #         plt.plot(arrayX[i][0], arrayX[i][1], 'o', color=colors[1])
-    # for k in np.unique(arrayY):
-    #     plt.plot(arrayX[arrayY == k, 0], arrayX[arrayY == k, 1], 'o', label='class {}'.format(k), color=colors[k])
+    trainX = np.vstack((dataset.trainX_0, dataset.trainX_1, dataset.trainX_2, dataset.trainX_3))
+    trainY = np.hstack((dataset.trainY_0, dataset.trainY_1, dataset.trainY_2, dataset.trainY_3))
+    for k in np.unique(trainY):
+        plt.plot(trainX[trainY == k, 0], trainX[trainY == k, 1], 'o', label=f'class {k} + {colors[k]}',
+                 color=dataset_colors[k])
 
     # name = 'decision_boundary_test_plot'
 
     plt.legend(fontsize=7, ncol=1, facecolor='oldlace', edgecolor='r')
     plt.title(name)
-    plt.savefig('NormalMulty' + name + '_decision_boundary.png')
+    plt.savefig('NormalMultyClassClassification/NormalMulty' + name + '_decision_boundary.png')
     plt.close()

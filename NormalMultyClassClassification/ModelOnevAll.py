@@ -4,6 +4,7 @@ import numpy as np
 from qmlt.numerical import CircuitLearner
 from qmlt.numerical.helpers import make_param
 from qmlt.numerical.losses import square_loss
+from qmlt.numerical.losses import cross_entropy_with_softmax
 import datetime
 from NormalMultyClassClassification.DataPrep import DataSet
 
@@ -47,16 +48,18 @@ class Model:
             p0 = state.fock_prob([0, 2])
             p1 = state.fock_prob([2, 0])
             normalization = p0 + p1 + 1e-10
-            output = p1 / normalization
+            output = (p0 / normalization)  # * np.sqrt(x[0]**2 + x[1]**2)
 
             return output
 
-        circuit_output = [single_input_circuit(x) for x in X]
+        circuit_output = np.array([single_input_circuit(x) for x in X])
+        # summ = np.sum(np.array([np.sqrt(x[0]**2 + x[1]**2) for x in X]))
 
         return circuit_output
 
     def _myloss(self, circuit_output, targets):
         return square_loss(outputs=circuit_output, targets=targets) / len(targets)
+        # return cross_entropy_with_softmax(outputs=circuit_output, targets=targets) / len(targets)
 
     def _outputs_to_predictions(self, circuit_output):
         return (circuit_output)
@@ -67,13 +70,13 @@ class Model:
         with open(name, 'a') as file:
             for i in range(len(self.params0)):
                 file.write(str(self.params0[i])+',')
-            print('\n\n')
+            file.write('\n\n')
             for i in range(len(self.params1)):
                 file.write(str(self.params1[i])+',')
-            print('\n\n')
+            file.write('\n\n')
             for i in range(len(self.params2)):
                 file.write(str(self.params2[i])+',')
-            print('\n\n')
+            file.write('\n\n')
             for i in range(len(self.params3)):
                 file.write(str(self.params3[i])+',')
             file.write('\n\n\n')
@@ -151,13 +154,13 @@ class Model:
         # 2 class vs all
         train_x = np.vstack((dataset.trainX_2, dataset.trainX_0, dataset.trainX_1, dataset.trainX_3))
         train_y = np.hstack([[0] * (len(dataset.trainX_2)),
-                             [1] * (len(dataset.trainX_1) + len(dataset.trainX_2) + len(dataset.trainX_3))])
+                             [1] * (len(dataset.trainX_0) + len(dataset.trainX_1) + len(dataset.trainX_3))])
         self._train_third_vs_all(lr=lr, trainX=train_x, trainY=train_y, steps=steps)
 
         # 3 class vs all
         train_x = np.vstack((dataset.trainX_3, dataset.trainX_0, dataset.trainX_1, dataset.trainX_2))
         train_y = np.hstack([[0] * (len(dataset.trainX_3)),
-                             [1] * (len(dataset.trainX_1) + len(dataset.trainX_2) + len(dataset.trainX_3))])
+                             [1] * (len(dataset.trainX_0) + len(dataset.trainX_1) + len(dataset.trainX_2))])
         self._train_fourth_vs_all(lr=lr, trainX=train_x, trainY=train_y, steps=steps)
 
     def _predict_class(self, data_to_predict):
@@ -191,4 +194,17 @@ class Model:
             if predictions[i] == testY[i]:
                 counter += 1
         accuracy = counter/len(testY)
+        return accuracy
+
+    def score_model_simmetric(self, testX, testY):
+        predictions = self._predict_class(testX)
+        counter = 0
+        for i in range(len(testY)):
+            if testY[i] == 0 or testY[i] == 1:
+                if predictions[i] == 0 or predictions[i] == 1:
+                    counter += 1
+            if testY[i] == 2 or testY[i] == 3:
+                if predictions[i] == 2 or predictions[i] == 3:
+                    counter += 1
+        accuracy = counter / len(testY)
         return accuracy
