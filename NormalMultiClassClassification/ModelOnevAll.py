@@ -6,7 +6,7 @@ from qmlt.numerical.helpers import make_param
 from qmlt.numerical.losses import square_loss
 from qmlt.numerical.losses import cross_entropy_with_softmax
 import datetime
-from NormalMultyClassClassification.DataPrep import DataSet
+from NormalMultiClassClassification.DataPrep import DataSet
 
 squeeze_rate = float
 learning_rate = float
@@ -66,7 +66,7 @@ class Model:
         # return round(circuit_output)
 
     def _upload_params(self):
-        name = 'NormalMultyClassClassification/params.txt'
+        name = 'NormalMultiClassClassification/params.txt'
         with open(name, 'a') as file:
             for i in range(len(self.params0)):
                 file.write(str(self.params0[i])+',')

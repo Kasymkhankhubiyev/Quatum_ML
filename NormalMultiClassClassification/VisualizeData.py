@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from NormalMultyClassClassification.DataPrep import DataSet
-from NormalMultyClassClassification.ModelOnevAll import Model
+from NormalMultiClassClassification.DataPrep import DataSet
+from NormalMultiClassClassification.ModelOnevAll import Model
 
 def visualize_dataset(trainX, trainY, testX, testY, name: str) -> None:
     colors = ['blue', 'red', 'yellow', 'green', 'black', 'pink', 'orange', 'purple']
@@ -14,7 +14,7 @@ def visualize_dataset(trainX, trainY, testX, testY, name: str) -> None:
 
     plt.legend(fontsize=7, ncol=1, facecolor='oldlace', edgecolor='r')
     plt.title(name)
-    plt.savefig('NormalMultyClassClassification/'+name+'_classification_data_set.png')
+    plt.savefig('NormalMultiClassClassification/'+name+'_classification_data_set.png')
     plt.close()
 
 def plot_decision_boudary(model: Model, dataset: DataSet, N_gridpoints: int, name: str) -> None:
@@ -58,5 +58,5 @@ def plot_decision_boudary(model: Model, dataset: DataSet, N_gridpoints: int, nam
 
     plt.legend(fontsize=7, ncol=1, facecolor='oldlace', edgecolor='r')
     plt.title(name)
-    plt.savefig('NormalMultyClassClassification/NormalMulty' + name + '_decision_boundary.png')
+    plt.savefig('NormalMultiClassClassification/NormalMulty' + name + '_decision_boundary.png')
     plt.close()

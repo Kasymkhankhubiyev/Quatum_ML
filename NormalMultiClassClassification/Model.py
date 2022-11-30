@@ -122,7 +122,7 @@ class Model:
         return circuit_output
 
     def _upload_params(self):
-        name = 'NormalMultyClassClassification/params_on_'+ \
+        name = 'NormalMultiClassClassification/params_on_'+ \
             (datetime.datetime.strftime(datetime.datetime.now(), "%Y_%m_%d"))+'.txt'
         with open(name, 'a') as file:
             for i in range(len(self.params)):

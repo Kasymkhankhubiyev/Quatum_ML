@@ -1,7 +1,7 @@
-from NormalMultyClassClassification.DataPrep import *
-from NormalMultyClassClassification.VisualizeData import *
-# import NormalMultyClassClassification as nm
-import NormalMultyClassClassification.ModelOnevAll as ova
+from NormalMultiClassClassification.DataPrep import *
+from NormalMultiClassClassification.VisualizeData import *
+# import NormalMultiClassClassification as nm
+import NormalMultiClassClassification.ModelOnevAll as ova
 
 def run() -> None:
     data = create_data_set(100, .5)
