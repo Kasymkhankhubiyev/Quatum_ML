@@ -11,18 +11,7 @@ class Dataset(NamedTuple):
     testY: np.array
 
 
-def create_dataset() -> Dataset:
-    """
-    Data load from sklearn datasets. All data and targets are mixed.
-    Test is 10% of the dataset.
-    :return: Dataset of digits divided into train ans test subsets
-    """
-    # загружаем датасет
-    digits = load_digits()
-    # (trainX, trainY), (testX, testY) =
-
-    x = np.array(digits.data)
-    y = np.array(digits.target)
+def _mix_data(x, y):
     trainY, trainX = [], []
 
     # mix
@@ -31,15 +20,45 @@ def create_dataset() -> Dataset:
         trainY.append(y[indexes[i]])
         trainX.append(x[indexes[i]])
 
-    sep = round(len(trainY)*0.1) # ~10% for a test
+    return trainX, trainY
+
+
+def create_dataset() -> Dataset:
+    """
+    Data load from sklearn datasets. All data and targets are mixed.
+    Test is 10% of the dataset.
+    :return: Dataset of digits divided into train ans test subsets
+    """
+    # загружаем датасет
+    digits = load_digits()
+
+    x = np.array(digits.data)
+    y = np.array(digits.target)
+
+    trainX, trainY = _mix_data(x, y)
+    sep = round(len(trainY)*0.1)  # ~10% for a test
 
     return Dataset(testX=np.array(trainX[sep:]), trainX=np.array(trainX[:sep]),
                    testY=np.array(trainY[sep:]), trainY=np.array(trainY[:sep]))
 
 
-    #Изменяем размер изображения в пикселях
-    # trainX = trainX.reshape((trainX.shape[0], 16, 16, 1))
-    # testX = trainX.reshape((trainX.shape[0], 16, 16, 1))
+def create_dataset_binary(class0: int, class1=None) -> Dataset:
+    # загружаем датасет
+    digits = load_digits()
 
-    # переводим вектор в матричный вид, т.е. 1 там, где правильный класс,
-    # в других позициях 0 --- Нужно ли?
+    x = np.array(digits.data)
+    y = np.array(digits.target)
+
+    x0, y0 = x[np.where(y == class0)], y[np.where(y == class0)]
+
+    if class1 is not None:
+        x1, y1 = x[np.where(y == class1)], y[np.where(y == class1)]
+    else:
+        x1, y1 = x[np.where(y != class0)], y[np.where(y != class0)]
+
+    x, y = _mix_data(np.vstack((x0, x1)), np.hstack([y0, y1]))
+
+    sep = round(len(y) * 0.1)  # ~10% for a test
+
+    return Dataset(testX=np.array(x[sep:]), trainX=np.array(y[:sep]),
+                   testY=np.array(x[sep:]), trainY=np.array(y[:sep]))
