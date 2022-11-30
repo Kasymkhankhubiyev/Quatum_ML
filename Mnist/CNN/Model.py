@@ -14,7 +14,7 @@ class Model:
         self.params, self.squeeze_rate = None, None
         self.learner, self.clf_task = None, clf_task
         if clf_task not in ['binary', 'multi']:
-            raise DoesntMatchChosenTask
+            raise DoesntMatchChosenTask(tasks_list=['binary', 'multi'], err_task=clf_task)
 
     def _layer(self):
         pass
