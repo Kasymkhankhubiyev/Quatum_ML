@@ -8,6 +8,7 @@ import FisherIris.fisher
 from FisherIris import ParamsParcers
 from FisherIris import VisualizeData
 from Mnist.CNN.runfile import run
+from sklearn.datasets import load_digits
 
 
 def run_binary() -> None:
@@ -44,11 +45,17 @@ def run_fisher_decision_bound() -> None:
 
     VisualizeData.draw_decision_boundary(model=model, arrX=trainX, arrY=trainY, N_gridpoints=10, name='Fisher')
 
-from sklearn.datasets import load_digits
 
 if __name__ == '__main__':
 
     # runfile.run()
-   run()
+    run()
+
+    # data = load_digits()
+    # x, y = np.array(data.data), np.array(data.target)
+    # trainX, trainY = x[np.where(y==3)], y[np.where(y==3)]
+    #
+    #
+    # print(y[np.where(y==3)])
 
 
