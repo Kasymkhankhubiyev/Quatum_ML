@@ -43,8 +43,11 @@ def run_fisher_decision_bound() -> None:
 
     VisualizeData.draw_decision_boundary(model=model, arrX=trainX, arrY=trainY, N_gridpoints=10, name='Fisher')
 
+from sklearn.datasets import load_digits
 
 if __name__ == '__main__':
 
-    runfile.run()
+    # runfile.run()
+    data = load_digits()
+
 
