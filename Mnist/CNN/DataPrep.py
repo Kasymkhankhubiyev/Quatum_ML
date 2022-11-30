@@ -12,6 +12,11 @@ class Dataset(NamedTuple):
 
 
 def create_dataset() -> Dataset:
+    """
+    Data load from sklearn datasets. All data and targets are mixed.
+    Test is 10% of the dataset.
+    :return: Dataset of digits divided into train ans test subsets
+    """
     # загружаем датасет
     digits = load_digits()
     # (trainX, trainY), (testX, testY) =

@@ -7,6 +7,7 @@ from FisherIris import VisualizeData
 import FisherIris.fisher
 from FisherIris import ParamsParcers
 from FisherIris import VisualizeData
+from Mnist.CNN.runfile import run
 
 
 def run_binary() -> None:
@@ -48,6 +49,6 @@ from sklearn.datasets import load_digits
 if __name__ == '__main__':
 
     # runfile.run()
-    data = load_digits()
+   run()
 
 
