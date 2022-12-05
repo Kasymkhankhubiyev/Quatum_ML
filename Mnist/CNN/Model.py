@@ -191,5 +191,6 @@ class Model:
         pass
 
     def fit(self) -> None:
+        # TODO как сделать параметры общими?
         if self.clf_task == 'binary':
             pass
