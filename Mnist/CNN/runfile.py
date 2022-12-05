@@ -4,6 +4,7 @@ from Mnist.CNN.VisualizeData import draw_samples
 
 def run() -> None:
     digits = create_dataset()
+    print(digits.testX)
     draw_samples(dataset=digits, samples_number=8)
 
 
