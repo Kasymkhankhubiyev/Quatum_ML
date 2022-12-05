@@ -1,6 +1,6 @@
 r"""Probability of a particular Fock basis state.
 
-        Computes the probability :math:`|\braket{\vec{n}|\psi}|^2` of measuring
+        Computes the probability :math:`$|\braket{\vec{n}|\psi}|^2$` of measuring
         the given multi-mode Fock state based on the state :math:`\ket{\psi}`.
 
         .. warning::
@@ -13,7 +13,7 @@ r"""Probability of a particular Fock basis state.
             evident in larger scale problems.
 
         Args:
-            n (Sequence[int]): the Fock state :math:`\ket{\vec{n}}` that we want to measure the probability of
+            n (Sequence[int]): the Fock state :math:`$\ket{\vec{n}}$` that we want to measure the probability of
 
         Keyword Args:
             cutoff (int): Specifies where to truncate the computation (default value is 10).
