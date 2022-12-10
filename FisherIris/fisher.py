@@ -13,6 +13,7 @@ import datetime
 squeeze_rate = float
 learning_rate = float
 
+
 class Model:
 
     def __init__(self, params=None) -> None:

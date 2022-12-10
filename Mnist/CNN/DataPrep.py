@@ -44,6 +44,8 @@ def create_dataset() -> Dataset:
 
 def create_dataset_binary(class0: int, class1=None) -> Dataset:
     # загружаем датасет
+
+    # нужно взять два класса, например 1 и 7 / 0 и 9
     digits = load_digits()
 
     x = np.array(digits.data)
