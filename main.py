@@ -4,7 +4,7 @@ from Binary_Classification.Normal_distribution import Circuit
 from NormalMultiClassClassification import runfile
 from FisherIris import DataPrep
 from FisherIris import VisualizeData
-import FisherIris.fisher
+import FisherIris.Model
 from FisherIris import ParamsParcers
 from FisherIris import VisualizeData
 from Mnist.CNN.runfile import run
