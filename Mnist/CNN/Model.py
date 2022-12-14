@@ -85,29 +85,39 @@ class Model:
             ops.BSgate(params[47], params[48]) | (q[0], q[1])
             ops.BSgate(params[49], params[50]) | (q[2], q[3])
             ops.BSgate(params[51], params[51]) | (q[1], q[2])
+            ops.MeasureFock() | q[0]
+            ops.MeasureFock() | q[1]
+            ops.MeasureFock() | q[2]
+            ops.MeasureFock() | q[3]
 
-        return q[2]
+        eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
+        result = eng.run(qnn)
 
-    def _layer(self, x, params):
+        return q[2].val
+
+    def _layer(self, x, params) -> np.array:
         """
         8X8 - 64 // 4 = 16 блоков
         :param x: a single picture
         :param q:
         :return:
         """
+        print(f'input len: {len(x)}')
         axs_scale, _x = self._shaper(x)
         input_x = []
-        for i in range(0, axs_scale//2, 2):  # x
-            for j in range(0, axs_scale//2, 2):  # y
+        for i in range(0, axs_scale, 2):  # x
+            for j in range(0, axs_scale, 2):  # y
                 input_x.append(np.array([_x[i, j], _x[i, j+1], _x[i+1, j], _x[i+1, j+1]]))
 
         input_x = np.array(input_x)
         q = []
 
+        print(f'bloks num: {len(input_x)}')
+
         for block in input_x:
             q.append(self._layer_circuit(x=block, params=params))
 
-        return q
+        return np.array(q)
 
     def _output_layer(self, x, params):
 
@@ -176,17 +186,20 @@ class Model:
         sq = self.squeeze_rate
 
         def _single_circuit(x):
+            print(x)
 
             q = self._layer(x, params)
-            print(f'layer 0: {q}')
-            q = self._layer(q, params)
+            print(f'layer 0: {q.flatten()}')
+            q = self._layer(q.flatten(), params)
             print(f'layer 1: {q}')
-            # q = self._layer(q, self.params_layer2)
-            # print(f'layer 0: {q}')
 
-            return self._output_layer(q, params)
+            return self._output_layer(q.flatten(), params)
 
-        predictions = [_single_circuit(x) for x in X]
+        predictions = []
+        print(f'traindataset: {X.shape}')
+        for i in range(len(X)):
+            print(f'sample_{i}')
+            predictions = _single_circuit(X[i])
 
         return np.array(predictions)
 
@@ -255,4 +268,3 @@ class Model:
                 file.write('x: ' + str(testX[i]) + ', y: ' + str(testY[i]) + '\n')
             file.write("Accuracy on test set: {}".format(test_score['accuracy']) + '\n')
             file.write("Loss on test set: {}".format(test_score['loss']) + '\n\n\n')
-

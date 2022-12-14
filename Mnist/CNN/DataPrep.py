@@ -60,5 +60,5 @@ def create_dataset_binary(class0: int, class1=None) -> Dataset:
 
     sep = round(len(y) * 0.1)  # ~10% for a test
 
-    return Dataset(testX=np.array(x[sep:]), trainX=np.array(x[:sep]),
-                   testY=np.array(y[sep:]), trainY=np.array(y[:sep]))
+    return Dataset(trainX=np.array(x[sep:]), testX=np.array(x[:sep]),
+                   trainY=np.array(y[sep:]), testY=np.array(y[:sep]))

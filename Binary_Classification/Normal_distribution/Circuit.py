@@ -1,15 +1,13 @@
 import strawberryfields as sf
 from strawberryfields import ops
-import numpy as np
 from qmlt.numerical import CircuitLearner
 from qmlt.numerical.helpers import make_param
 from qmlt.numerical.losses import square_loss
 import datetime
 from Binary_Classification.Normal_distribution.VisualizeData import *
 
-# sqeeze_param = 0.195
-
 squeeze = float
+
 
 class Model:
 
@@ -140,9 +138,3 @@ class Model:
             eng.run(prog)
 
         return np.array(transform_data)
-
-
-
-
-
-
