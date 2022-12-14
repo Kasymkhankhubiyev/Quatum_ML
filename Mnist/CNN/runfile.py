@@ -7,7 +7,7 @@ def run() -> None:
     digits = create_dataset_binary(class0=1, class1=7)
     # draw_samples(dataset=digits, samples_number=8)
 
-    # model = Model()
-    # model.fit(lr=0.5, sq=1.5, steps=10, clf_task='binary', trainX=digits.trainX, trainY=digits.trainY)
-
-
+    model = Model()
+    model.fit(lr=0.5, sq=1.5, steps=10, clf_task='binary', trainX=digits.trainX, trainY=digits.trainY)
+    model.predict(data_to_predict=digits.testX)
+    model.score_model(testX=digits.testX, testY=digits.testY)

@@ -15,9 +15,9 @@ class Model:
     'multi' - multiclass classification
     """
 
-    def __init__(self, params=None,) -> None:
+    def __init__(self, params=None) -> None:
         self.params, self.squeeze_rate = [make_param(name='param' + str(i), constant=.5) for i in range(52)], None
-        self.learner, self.clf_task = None, clf_task
+        self.learner, self.clf_task = None, None
         self.lr, self.steps = None, None
         if params is not None:
             pass
@@ -88,7 +88,7 @@ class Model:
 
         return q[2]
 
-    def _layer(self, x, params, disp):
+    def _layer(self, x, params):
         """
         8X8 - 64 // 4 = 16 блоков
         :param x: a single picture
@@ -99,7 +99,7 @@ class Model:
         input_x = []
         for i in range(0, axs_scale//2, 2):  # x
             for j in range(0, axs_scale//2, 2):  # y
-                input_x.append(np.array[_x[i, j], _x[i, j+1], _x[i+1, j], _x[i+1, j+1]])
+                input_x.append(np.array([_x[i, j], _x[i, j+1], _x[i+1, j], _x[i+1, j+1]]))
 
         input_x = np.array(input_x)
         q = []
@@ -109,7 +109,7 @@ class Model:
 
         return q
 
-    def _output_layer(self, x, params, disp):
+    def _output_layer(self, x, params):
 
         sq = self.squeeze_rate
         qnn = sf.Program(4)
@@ -172,19 +172,19 @@ class Model:
         return output
 
     # надо возвращать сам регистр
-    def _circuit(self, X):
+    def _circuit(self, X, params):
         sq = self.squeeze_rate
 
         def _single_circuit(x):
 
-            q = self._layer(x, self.params)
+            q = self._layer(x, params)
             print(f'layer 0: {q}')
-            q = self._layer(q, self.params)
+            q = self._layer(q, params)
             print(f'layer 1: {q}')
             # q = self._layer(q, self.params_layer2)
             # print(f'layer 0: {q}')
 
-            return self._output_layer(q, self.params)
+            return self._output_layer(q, params)
 
         predictions = [_single_circuit(x) for x in X]
 
@@ -199,13 +199,15 @@ class Model:
             circuit_output[i] = round(circuit_output[i])
         return circuit_output
 
-    def predict(self) -> np.array:
-        pass
+    def predict(self, data_to_predict) -> np.array:
+        outcomes = self.learner.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
+        predictions = outcomes['predictions']
+        return predictions
 
     def _upload_params(self):
-        name = 'FisherIris/params_on_'+(datetime.datetime.strftime(datetime.datetime.now(), "%Y_%m_%d_%H_M"))+'.txt'
+        name = 'Mnist/CNN/params.txt'
         with open(name, 'a') as file:
-            file.write('Mnist/CNN/params_on_'+datetime.datetime.strftime(datetime.datetime.now())+'\n\n')
+            file.write('Mnist/CNN/params_on_'+datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")+'\n\n')
             for i in range(len(self.params)):
                 file.write(str(self.params[i])+',')
             file.write('\n\n\n')
@@ -215,10 +217,11 @@ class Model:
         В задаче сверточных сетей мы обучаем сверточную матрицу:
         :return:
         """
-        self.lr = lr
-        self.steps = steps
+        self.lr, self.steps, self.squeeze_rate = lr, steps, sq
         if clf_task not in ['binary', 'multi']:
             raise DoesntMatchChosenTask(tasks_list=['binary', 'multi'], err_task=clf_task)
+        else:
+            self.clf_task =clf_task
         if self.clf_task == 'binary':
             hyperparams = {'circuit': self._circuit,
                            'init_circuit_params': self.params,
