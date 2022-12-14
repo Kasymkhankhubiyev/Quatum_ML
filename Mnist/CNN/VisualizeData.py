@@ -20,11 +20,14 @@ def draw_samples(dataset: Dataset, samples_number: int) -> None:
         fig, axs = plt.subplots(nrows=rows, ncols=4)
         for i in range(samples_number):
             index = np.random.randint(len(dataset.trainY))
-            axs[i // 4, i % 4].imshow(dataset.trainX[index, :].reshape([8, 8]))
+            # print(index)
+            # print(dataset.trainX.shape)
+            axs[i // 4, i % 4].imshow(dataset.trainX[index].reshape([8, 8]))
     else:
         fig, axs = plt.subplots(nrows=rows, ncols=4)
         for i in range(samples_number):
             index = np.random.randint(len(dataset.trainY))
-            axs[i % 4].imshow(dataset.trainX[index, :].reshape([8, 8]))
+            # print(dataset.trainX[index].shape)
+            axs[i % 4].imshow(dataset.trainX[index].reshape([8, 8]))
 
     plt.savefig('Mnist/CNN/Digits.png')

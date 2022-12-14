@@ -44,23 +44,21 @@ def create_dataset() -> Dataset:
 
 def create_dataset_binary(class0: int, class1=None) -> Dataset:
     # загружаем датасет
-
-    # нужно взять два класса, например 1 и 7 / 0 и 9
     digits = load_digits()
 
     x = np.array(digits.data)
     y = np.array(digits.target)
 
-    x0, y0 = x[np.where(y == class0)], y[np.where(y == class0)]
+    x0, y0 = x[y == class0], y[y == class0]
 
     if class1 is not None:
-        x1, y1 = x[np.where(y == class1)], y[np.where(y == class1)]
+        x1, y1 = x[y == class1], y[y == class1]
     else:
-        x1, y1 = x[np.where(y != class0)], y[np.where(y != class0)]
+        x1, y1 = x[y != class0], y[y != class0]
 
     x, y = _mix_data(np.vstack((x0, x1)), np.hstack([y0, y1]))
 
     sep = round(len(y) * 0.1)  # ~10% for a test
 
-    return Dataset(testX=np.array(x[sep:]), trainX=np.array(y[:sep]),
-                   testY=np.array(x[sep:]), trainY=np.array(y[:sep]))
+    return Dataset(testX=np.array(x[sep:]), trainX=np.array(x[:sep]),
+                   testY=np.array(y[sep:]), trainY=np.array(y[:sep]))
