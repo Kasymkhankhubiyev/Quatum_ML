@@ -9,6 +9,8 @@ from qmlt.numerical.helpers import make_param
 from qmlt.numerical.losses import cross_entropy_with_softmax
 
 
+#TODO: для каждого сверточного уровня должна быть своя матрица свертки
+
 class Model:
     """
     cf_tasl: classification type, if 'binary' - binary classification,
@@ -189,14 +191,14 @@ class Model:
             print(x)
 
             q = self._layer(x, params)
-            print(f'layer 0: {q.flatten()}')
+            # print(f'layer 0: {q.flatten()}')
             q = self._layer(q.flatten(), params)
-            print(f'layer 1: {q}')
+            # print(f'layer 1: {q}')
 
             return self._output_layer(q.flatten(), params)
 
         predictions = []
-        print(f'traindataset: {X.shape}')
+        # print(f'traindataset: {X.shape}')
         for i in range(len(X)):
             print(f'sample_{i}')
             predictions = _single_circuit(X[i])
