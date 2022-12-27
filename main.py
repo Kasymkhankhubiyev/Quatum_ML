@@ -23,10 +23,10 @@ def run_binary() -> None:
     model.predict(data_to_predict=data.testX)
 
 def run_binary_complex() -> None:
-    data = create_symmetric_dataset(200, 1.5)
+    data = create_symmetric_dataset(100, 0.5)
     visualize_dataset(data.trainX, data.trainY, data.testX, data.testY, 'Normal 0.5')
     model = Circuit.Model()
-    model.train(lr=0.75, steps=150, trainX=data.trainX, trainY=data.trainY, sq=1.575)
+    model.train(lr=0.75, steps=100, trainX=data.trainX, trainY=data.trainY, sq=1.575)
     model.score_model(testX=data.testX, testY=data.testY)
     print('accuracy on train: ')
     model.predict(data_to_predict=data.trainX)
@@ -61,8 +61,8 @@ if __name__ == '__main__':
 
     # runfile.run()
     # run_fisher()
-    run()
-    # run_binary_complex()
+    # run()
+    run_binary_complex()
     # run_binary()
     # data = load_digits()
     # x, y = np.array(data.data), np.array(data.target)
