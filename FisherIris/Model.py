@@ -82,10 +82,10 @@ class Model:
                 ops.Pgate(params[39]) | q[1]
                 ops.Pgate(params[40]) | q[2]
                 ops.Pgate(params[41]) | q[3]
-                ops.Kgate(params[42]) | q[0]
-                ops.Kgate(params[43]) | q[1]
-                ops.Kgate(params[44]) | q[2]
-                ops.Kgate(params[45]) | q[3]
+                # ops.Kgate(params[42]) | q[0]
+                # ops.Kgate(params[43]) | q[1]
+                # ops.Kgate(params[44]) | q[2]
+                # ops.Kgate(params[45]) | q[3]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
 

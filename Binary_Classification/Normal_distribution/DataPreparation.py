@@ -37,3 +37,30 @@ def create_data_set(classes_scale: int, intersect_rate: float) -> DataSet:
     # из этого можно сделать некоторую общую библиотеку
     return _create_normal_distributed_data(classes_scale, intersect_rate)
 
+def _create_normal_distributed_data_symmetric(classes_scale: int, intersect_rate: float) -> DataSet:
+    np.random.seed(0)
+    l = classes_scale
+    n = 2
+    drop = intersect_rate
+
+    X0 = np.array([[-2, -2]]) + drop * np.random.randn(l, n)
+    X1 = np.array([[-2, 2]]) + drop * np.random.randn(l, n)
+    X2 = np.array([[2, -2]]) + drop * np.random.randn(l, n)
+    X3 = np.array([[2, 2]]) + drop * np.random.randn(l, n)
+
+    # конкатенируем все в одну матрицу
+    # при этом по 20 точек оставим на тест/валидацию
+    X = np.vstack((X0[10:], X1[10:], X2[10:], X3[10:]))
+    ValX = np.vstack((X0[:10], X1[:10], X2[:10], X3[:10]))
+
+    # конкатенируем все в один столбец с соответствующими значениями для класса 0 или 1
+    y = np.hstack([[0] * (l - 10), [0] * (l - 10), [1] * (l - 10), [1] * (l - 10)])
+    ValY = np.hstack([[0] * 10, [0] * 10, [1] * 10, [1] * 10])
+
+    return DataSet(trainX=X, trainY=y, testX=ValX, testY=ValY)
+
+
+def create_symmetric_dataset(classes_scale: int, intersect_rate: float) -> DataSet:
+    # из этого можно сделать некоторую общую библиотеку
+    return _create_normal_distributed_data_symmetric(classes_scale, intersect_rate)
+
