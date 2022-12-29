@@ -1,0 +1,27 @@
+{'name': 'phi0', 'val': 0.9450459647729587, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi1', 'val': 1.0727757770956123, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi2', 'val': 0.6971264441276644, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi3', 'val': 0.33817305291022004, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi4', 'val': 0.19018373118392318, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi5', 'val': 0.7, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi6', 'val': 0.7, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi7', 'val': 0.637529656738869, 'regul': False, 'monitor': False},
+
+
+{'name': 'phi8', 'val': 0.7, 'regul': False, 'monitor': False},
+
+

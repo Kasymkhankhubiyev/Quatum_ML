@@ -12,10 +12,10 @@ from sklearn.datasets import load_digits
 
 
 def run_binary() -> None:
-    data = create_data_set(200, 1.5)
+    data = create_data_set(100, 1.5)
     visualize_dataset(data.trainX, data.trainY, data.testX, data.testY, 'Normal 0.5')
     model = Circuit.Model()
-    model.train(lr=0.75, steps=150, trainX=data.trainX, trainY=data.trainY, sq=1.575)
+    model.train(lr=0.75, steps=50, trainX=data.trainX, trainY=data.trainY, sq=1.575)
     model.score_model(testX=data.testX, testY=data.testY)
     print('accuracy on train: ')
     model.predict(data_to_predict=data.trainX)
@@ -62,8 +62,8 @@ if __name__ == '__main__':
     # runfile.run()
     # run_fisher()
     # run()
-    run_binary_complex()
-    # run_binary()
+    # run_binary_complex()
+    run_binary()
     # data = load_digits()
     # x, y = np.array(data.data), np.array(data.target)
     # trainX, trainY = x[np.where(y==3)], y[np.where(y==3)]

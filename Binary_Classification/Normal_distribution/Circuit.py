@@ -15,9 +15,11 @@ class Model:
         self.params = [make_param(name='phi'+str(i), constant=.7) for i in range(9)]
         self.learner, self.squeeze_param, self.lr, self.steps = None, None, None, None
         self.transform_data = []
+        self.counter = 0
 
     def _circuit(self, X, params):
-
+        # print(self.counter)
+        # self.counter += 1
         # prog = sf.Program(2)
         sq = self.squeeze_param
 

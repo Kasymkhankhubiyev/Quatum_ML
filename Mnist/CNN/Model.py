@@ -21,6 +21,7 @@ class Model:
         self.params, self.squeeze_rate = [make_param(name='param' + str(i), constant=.5) for i in range(150)], None
         self.learner, self.clf_task = None, None
         self.lr, self.steps = None, None
+        self.step = 0
         if params is not None:
             pass
 
@@ -182,11 +183,11 @@ class Model:
         ei[1] = 2
         p1 = state.fock_prob(ei)
         ei[1] = 0
-        ei[2] = 2
-        p2 = state.fock_prob(ei)
-        ei[2] = 0
+        # ei[2] = 2
+        # p2 = state.fock_prob(ei)
+        # ei[2] = 0
 
-        normalization = p0 + p1  # + p2 + 1e-10
+        normalization = p0 + p1 + 1e-10  # + p2
         output = [p0 / normalization]  # , p1 / normalization]  # , p2 / normalization]
 
         return output
@@ -197,6 +198,8 @@ class Model:
     # надо возвращать сам регистр
     def _circuit(self, X, params):
         sq = self.squeeze_rate
+        print(self.step)
+        self.step += 1
 
         def _single_circuit(x):
             # print(x)
@@ -208,23 +211,20 @@ class Model:
 
             return self._output_layer(q.flatten(), params, delta=108)
 
-        predictions = []
-        # print(f'traindataset: {X.shape}')
-        for i in range(len(X)):
-            # print(f'sample_{i}')
-            predictions.append(_single_circuit(X[i]))
+        # predictions = [_single_circuit(X[i]) for i in range(len(X))]
+        # for i in range(len(X)):
+        #     predictions.append(_single_circuit(X[i]))
+        # circuit_output = np.array(predictions).flatten()
 
-        return np.array(predictions).flatten()
+        circuit_output = np.array([_single_circuit(X[i]) for i in range(len(X))]).flatten()
+        return circuit_output
 
     def _myloss(self, circuit_output, targets):
-
         # return cross_entropy_with_softmax(outputs=circuit_output, targets=targets) / len(targets)
         return square_loss(outputs=circuit_output, targets=targets) / len(targets)
 
     def _outputs_to_predictions(self, circuit_output):
-        for i in range(len(circuit_output)):
-            circuit_output[i] = round(circuit_output[i])
-        return circuit_output
+        return np.round(circuit_output)
 
     def predict(self, data_to_predict) -> np.array:
         outcomes = self.learner.run_circuit(X=data_to_predict, outputs_to_predictions=self._outputs_to_predictions)
@@ -272,7 +272,7 @@ class Model:
         print("Accuracy on test set: {}".format(test_score['accuracy']))
         print("Loss on test set: {}".format(test_score['loss']))
 
-        name = 'FisherIris/results.txt'
+        name = 'Mnist/CNN/results.txt'
         with open(name, 'a') as file:
             file.write('results on ' + str(datetime.datetime.now()) + ' : \n')
             file.write(f'squeezing parameter:    {self.squeeze_rate}+\n')
