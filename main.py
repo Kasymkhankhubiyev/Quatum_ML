@@ -61,9 +61,9 @@ if __name__ == '__main__':
 
     # runfile.run()
     # run_fisher()
-    # run()
+    run()
     # run_binary_complex()
-    run_binary()
+    # run_binary()
     # data = load_digits()
     # x, y = np.array(data.data), np.array(data.target)
     # trainX, trainY = x[np.where(y==3)], y[np.where(y==3)]

@@ -6,10 +6,8 @@ from exceptions import DoesntMatchChosenTask
 from strawberryfields import ops
 from qmlt.numerical import CircuitLearner
 from qmlt.numerical.helpers import make_param
-from qmlt.numerical.losses import cross_entropy_with_softmax, square_loss
+from qmlt.numerical.losses import square_loss
 
-
-#TODO: для каждого сверточного уровня должна быть своя матрица свертки
 
 class Model:
     """
@@ -22,6 +20,7 @@ class Model:
         self.learner, self.clf_task = None, None
         self.lr, self.steps = None, None
         self.step = 0
+        self.X, self.Y = None, None
         if params is not None:
             pass
 
@@ -88,7 +87,6 @@ class Model:
             # ops.Kgate(params[43]) | q[1]
             # ops.Kgate(params[44]) | q[2]
             # ops.Kgate(params[45]) | q[3]
-
             ops.BSgate(params[42 + delta], params[43 + delta]) | (q[0], q[1])
             ops.BSgate(params[44 + delta], params[45 + delta]) | (q[2], q[3])
             ops.BSgate(params[46 + delta], params[47 + delta]) | (q[1], q[2])
@@ -100,9 +98,8 @@ class Model:
             ops.MeasureFock() | q[2]
             ops.MeasureFock() | q[3]
 
-        eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
-        result = eng.run(qnn)
-
+        eng = sf.Engine('fock', backend_options={'cutoff_dim': 7, 'eval': True})
+        eng.run(qnn)
         return q[2].val
 
     def _layer(self, x, params, delta) -> np.array:
@@ -112,7 +109,6 @@ class Model:
         :param q:
         :return:
         """
-        # print(f'input len: {len(x)}')
         axs_scale, _x = self._shaper(x)
         input_x = []
         for i in range(0, axs_scale, 2):  # x
@@ -120,18 +116,11 @@ class Model:
                 input_x.append(np.array([_x[i, j], _x[i, j+1], _x[i+1, j], _x[i+1, j+1]]))
 
         input_x = np.array(input_x)
-        q = []
-
-        # print(f'bloks num: {len(input_x)}')
-
-        for block in input_x:
-            q.append(self._layer_circuit(x=block, params=params, delta=delta))
-
+        q = [self._layer_circuit(x=block, params=params, delta=delta) for block in input_x]
         return np.array(q)
 
     def _output_layer(self, x, params, delta):
 
-        # def single_layer(x, params, delta):
         sq = self.squeeze_rate
         qnn = sf.Program(4)
 
@@ -192,31 +181,21 @@ class Model:
 
         return output
 
-        # outputs = [single_layer(x, params, delta) for x in X]
-        # return outputs
-
-    # надо возвращать сам регистр
     def _circuit(self, X, params):
         sq = self.squeeze_rate
         print(self.step)
         self.step += 1
 
-        def _single_circuit(x):
-            # print(x)
-
+        def _single_circuit(x, i):
+            print(f'single_circuit_{i}')
             q = self._layer(x, params, delta=0)
-            # print(f'layer 0: {q.flatten()}')
             q = self._layer(q.flatten(), params, delta=54)
-            # print(f'layer 1: {q}')
-
             return self._output_layer(q.flatten(), params, delta=108)
 
-        # predictions = [_single_circuit(X[i]) for i in range(len(X))]
-        # for i in range(len(X)):
-        #     predictions.append(_single_circuit(X[i]))
-        # circuit_output = np.array(predictions).flatten()
-
-        circuit_output = np.array([_single_circuit(X[i]) for i in range(len(X))]).flatten()
+        circuit_output = np.array([_single_circuit(X[i], i) for i in range(len(X))]).flatten()
+        print(f'output_shape:{circuit_output.shape}\n')
+        loss = self._myloss(circuit_output=circuit_output, targets=self.Y)
+        print(f'loss {loss} on step {self.step}')
         return circuit_output
 
     def _myloss(self, circuit_output, targets):
@@ -244,11 +223,13 @@ class Model:
         В задаче сверточных сетей мы обучаем сверточную матрицу:
         :return:
         """
+        self.X, self.Y = trainX, trainY
+
         self.lr, self.steps, self.squeeze_rate = lr, steps, sq
         if clf_task not in ['binary', 'multi']:
             raise DoesntMatchChosenTask(tasks_list=['binary', 'multi'], err_task=clf_task)
         else:
-            self.clf_task =clf_task
+            self.clf_task = clf_task
         if self.clf_task == 'binary':
             hyperparams = {'circuit': self._circuit,
                            'init_circuit_params': self.params,
@@ -262,7 +243,6 @@ class Model:
                            }
 
             self.learner = CircuitLearner(hyperparams=hyperparams)
-
             self.learner.train_circuit(X=trainX, Y=trainY, steps=steps)
             self._upload_params()
 

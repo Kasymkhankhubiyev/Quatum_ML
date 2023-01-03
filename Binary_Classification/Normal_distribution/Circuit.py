@@ -61,7 +61,7 @@ class Model:
 
         return circuit_output
 
-    def _myloss(self, circuit_output, targets):
+    def _myloss(self, circuit_output, targets):  # в лосс функции навверняка нужно округлить
         return square_loss(outputs=circuit_output, targets=targets) / len(targets)
 
     def _outputs_to_predictions(self, circuit_output):
