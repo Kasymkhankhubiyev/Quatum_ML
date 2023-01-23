@@ -13,26 +13,13 @@ squeeze = float
 class Model:
 
     def __init__(self):
-        self.params = [make_param(name='phi'+str(i), constant=.7) for i in range(9)]
+        self.params = [make_param(name='phi'+str(i), constant=.7) for i in range(8)]
         self.learner, self.squeeze_param, self.lr, self.steps = None, None, None, None
         self.transform_data = []
         self.counter = 0
 
     def _circuit(self, X, params):
         sq = self.squeeze_param
-
-        def simple_run(x):
-            prog = sf.Program(2)
-
-            with prog.context as q:
-                ops.Sgate(sq, x[0]) | q[0]
-                ops.Sgate(sq, x[1]) | q[1]
-                ops.BSgate(params[0], params[7]) | (q[0], q[1])
-                ops.MeasureFock() | q[0]
-
-            eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
-            eng.run(prog)
-            n = q[0].val
 
         def single_input_circuit(x):
             prog = sf.Program(2)
@@ -61,12 +48,7 @@ class Model:
 
             return output
 
-        circuit_output = []
-        for x in X:
-            simple_run(x)
-            circuit_output.append(single_input_circuit(x))
-
-        # circuit_output = [single_input_circuit(x) for x in X]
+        circuit_output = [single_input_circuit(x) for x in X]
 
         return circuit_output
 

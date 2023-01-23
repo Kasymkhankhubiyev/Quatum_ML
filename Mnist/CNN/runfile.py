@@ -10,6 +10,6 @@ def run() -> None:
     print(digits.testY)
     model = Model()
     # print(f'trainX = {digits.trainX.shape}')
-    model.fit(lr=1.75, sq=1.5, steps=1, clf_task='binary', trainX=digits.trainX[:5], trainY=digits.trainY[:5])
+    model.fit(lr=1.75, sq=1.5, steps=5, clf_task='binary', trainX=digits.trainX[:5], trainY=digits.trainY[:5])
     model.predict(data_to_predict=digits.testX)
     model.score_model(testX=digits.testX, testY=digits.testY)

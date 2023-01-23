@@ -12,7 +12,7 @@ from sklearn.datasets import load_digits
 
 
 def run_binary() -> None:
-    data = create_data_set(100, 1.5)
+    data = create_data_set(20, 1.5)
     visualize_dataset(data.trainX, data.trainY, data.testX, data.testY, 'Normal 0.5')
     model = Circuit.Model()
     model.train(lr=0.75, steps=50, trainX=data.trainX, trainY=data.trainY, sq=1.575)
@@ -61,9 +61,9 @@ if __name__ == '__main__':
 
     # runfile.run()
     # run_fisher()
-    run()
+    # run()
     # run_binary_complex()
-    # run_binary()
+    run_binary()
     # data = load_digits()
     # x, y = np.array(data.data), np.array(data.target)
     # trainX, trainY = x[np.where(y==3)], y[np.where(y==3)]
