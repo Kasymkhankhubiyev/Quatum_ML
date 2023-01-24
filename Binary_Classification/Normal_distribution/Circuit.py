@@ -4,7 +4,6 @@ from qmlt.numerical import CircuitLearner
 from qmlt.numerical.helpers import make_param
 from qmlt.numerical.losses import square_loss
 import datetime
-from Binary_Classification.Normal_distribution.VisualizeData import *
 from helper import upload_params
 
 squeeze = float
@@ -15,7 +14,6 @@ class Model:
     def __init__(self):
         self.params = [make_param(name='phi'+str(i), constant=.7) for i in range(8)]
         self.learner, self.squeeze_param, self.lr, self.steps = None, None, None, None
-        self.transform_data = []
         self.counter = 0
 
     def _circuit(self, X, params):
