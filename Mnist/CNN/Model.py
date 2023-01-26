@@ -245,7 +245,7 @@ class Model:
             file.write(f'squeezing parameter:    {self.squeeze_rate}+\n')
             file.write(f'learning rate:     {self.lr} \n')
             file.write(f'steps:     {self.steps} \n')
-            for i in range(len(testY)):
-                file.write('x: ' + str(testX[i]) + ', y: ' + str(testY[i]) + '\n')
+            # for i in range(len(testY)):
+            #     file.write('x: ' + str(testX[i]) + ', y: ' + str(testY[i]) + '\n')
             file.write("Accuracy on test set: {}".format(test_score['accuracy']) + '\n')
             file.write("Loss on test set: {}".format(test_score['loss']) + '\n\n\n')
