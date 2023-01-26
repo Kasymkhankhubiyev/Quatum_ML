@@ -17,7 +17,7 @@ class Model:
     """
 
     def __init__(self, params=None) -> None:
-        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(150)]
+        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(54)]
         self.squeeze_rate, self.learner, self.clf_task = None, None, None
         self.lr, self.steps = None, None
         self.step = 0
@@ -108,7 +108,7 @@ class Model:
                 # ops.BSgate(params[52 + delta], params[53 + delta]) | (q[1], q[2])
                 # ops.MeasureFock() | q[0]
 
-            eng = sf.Engine('fock', backend_options={'cutoff_dim': 7, 'eval': True})
+            eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             result = eng.run(qnn)
             state = result.state
 
@@ -119,7 +119,7 @@ class Model:
             output = p0 / normalization  # , p1 / normalization]  # , p2 / normalization]
             return output
 
-        def layer(x, params, delta):
+        def layer(x):
             """
             8X8 - 64 // 4 = 16 блоков
             :param x: a single picture
@@ -169,16 +169,16 @@ class Model:
                 # ops.Rgate(params[31 + delta]) | q[0]
                 # ops.Rgate(params[32 + delta]) | q[1]
                 # ops.Rgate(params[33 + delta]) | q[2]
-                ops.Dgate(params[34 + delta]) | q[0]
-                ops.Dgate(params[35 + delta]) | q[1]
-                ops.Dgate(params[36 + delta]) | q[2]
-                ops.Dgate(params[37 + delta]) | q[3]
-                ops.Pgate(params[38 + delta]) | q[0]
-                ops.Pgate(params[39 + delta]) | q[1]
-                ops.Pgate(params[40 + delta]) | q[2]
-                ops.Pgate(params[41 + delta]) | q[3]
+                ops.Dgate(params[15 + delta]) | q[0]
+                ops.Dgate(params[16 + delta]) | q[1]
+                ops.Dgate(params[17 + delta]) | q[2]
+                ops.Dgate(params[18 + delta]) | q[3]
+                ops.Pgate(params[19 + delta]) | q[0]
+                ops.Pgate(params[20 + delta]) | q[1]
+                ops.Pgate(params[21 + delta]) | q[2]
+                ops.Pgate(params[22 + delta]) | q[3]
 
-            eng = sf.Engine('fock', backend_options={'cutoff_dim': 7, 'eval': True})
+            eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             result = eng.run(qnn)
             state = result.state
 
@@ -190,18 +190,18 @@ class Model:
 
             return output
 
-        def _single_circuit(x, i):
-            # print(f'single_circuit_{i}')
-            new_x = layer(x, params, delta=0)
+        def _single_circuit(x):
+            # print(i)
+            new_x = layer(x)
             q = [layer_circuit(x=block, params=params, delta=0) for block in new_x]
-            new_xx = layer(np.array(q).flatten(), params, delta=54)
+            new_xx = layer(np.array(q).flatten())
             # new_xx = layer(np.array(x).flatten(), params, delta=54)
-            qq = [layer_circuit(x=block, params=params, delta=54) for block in new_xx]
-            output = output_layer(np.array(qq).flatten(), params, delta=108)
+            qq = [layer_circuit(x=block, params=params, delta=15) for block in new_xx]
+            output = output_layer(np.array(qq).flatten(), params, delta=30)
             # output = output_layer(np.array(x).flatten(), params, delta=108)
             return output
 
-        circuit_output = [_single_circuit(X[i], i) for i in range(len(X))]
+        circuit_output = [_single_circuit(x) for x in X]
         return circuit_output
 
     def predict(self, data_to_predict) -> np.array:
