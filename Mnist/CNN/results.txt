@@ -318,3 +318,11 @@ Accuracy on test set: 0.4722222222222222
 Loss on test set: 0.18976358527633408
 
 
+results on 2023-01-27 23:18:34.872144 : 
+squeezing parameter:    1.5+
+learning rate:     0.75 
+steps:     10 
+Accuracy on test set: 0.5
+Loss on test set: 0.12603996997304284
+
+
