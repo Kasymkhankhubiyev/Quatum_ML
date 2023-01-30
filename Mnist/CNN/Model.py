@@ -17,7 +17,7 @@ class Model:
     """
 
     def __init__(self, params=None) -> None:
-        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(54)]
+        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(36)]
         self.squeeze_rate, self.learner, self.clf_task = None, None, None
         self.lr, self.steps = None, None
         self.step = 0
@@ -52,7 +52,7 @@ class Model:
             elif len(x) == 4:
                 return 2, np.array(x.reshape([2, 2]))
 
-        def layer_circuit(x, params, delta):
+        def conv_layer(x, delta):
             """
             54 parameters
             :param x: input data with shape (4,)
@@ -66,47 +66,12 @@ class Model:
                 ops.Sgate(self.squeeze_rate, x[1]) | q[1]
                 ops.Sgate(self.squeeze_rate, x[2]) | q[2]
                 ops.Sgate(self.squeeze_rate, x[3]) | q[3]
-                ops.BSgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
-                ops.BSgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
-                ops.BSgate(params[4 + delta], params[5 + delta]) | (q[1], q[2])
-                # ops.BSgate(params[6 + delta], params[7 + delta]) | (q[0], q[3])
-                # ops.BSgate(params[9 + delta], params[8 + delta]) | (q[2], q[0])
-                # ops.BSgate(params[10 + delta], params[11 + delta]) | (q[1], q[3])
-                ops.Rgate(params[12 + delta]) | q[0]
-                ops.Rgate(params[13 + delta]) | q[1]
-                ops.Rgate(params[14 + delta]) | q[2]
-                # ops.Sgate(params[15 + delta]) | q[0]
-                # ops.Sgate(params[16 + delta]) | q[1]
-                # ops.Sgate(params[17 + delta]) | q[2]
-                # ops.Sgate(params[18 + delta]) | q[3]
-                # # ops.BSgate(params[19 + delta], params[20 + delta]) | (q[0], q[1])
-                # ops.BSgate(params[21 + delta], params[22 + delta]) | (q[2], q[3])
-                # ops.BSgate(params[23 + delta], params[24 + delta]) | (q[1], q[2])
-                # ops.BSgate(params[25 + delta], params[26 + delta]) | (q[0], q[1])
-                # ops.BSgate(params[27 + delta], params[28 + delta]) | (q[2], q[3])
-                # ops.BSgate(params[29 + delta], params[30 + delta]) | (q[1], q[2])
-                # ops.Rgate(params[31 + delta]) | q[0]
-                # ops.Rgate(params[32 + delta]) | q[1]
-                # ops.Rgate(params[33 + delta]) | q[2]
-                # ops.Dgate(params[34 + delta]) | q[0]
-                # ops.Dgate(params[35 + delta]) | q[1]
-                # ops.Dgate(params[36 + delta]) | q[2]
-                # ops.Dgate(params[37 + delta]) | q[3]
-                # ops.Pgate(params[38 + delta]) | q[0]
-                # ops.Pgate(params[39 + delta]) | q[1]
-                # ops.Pgate(params[40 + delta]) | q[2]
-                # ops.Pgate(params[41 + delta]) | q[3]
-                # ops.Kgate(params[42]) | q[0]
-                # ops.Kgate(params[43]) | q[1]
-                # ops.Kgate(params[44]) | q[2]
-                # ops.Kgate(params[45]) | q[3]
-                # ops.BSgate(params[42 + delta], params[43 + delta]) | (q[0], q[1])
-                # ops.BSgate(params[44 + delta], params[45 + delta]) | (q[2], q[3])
-                # ops.BSgate(params[46 + delta], params[47 + delta]) | (q[1], q[2])
-                # ops.BSgate(params[48 + delta], params[49 + delta]) | (q[0], q[1])
-                # ops.BSgate(params[50 + delta], params[51 + delta]) | (q[2], q[3])
-                # ops.BSgate(params[52 + delta], params[53 + delta]) | (q[1], q[2])
-                # ops.MeasureFock() | q[0]
+                ops.MZgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
+                ops.MZgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
+                ops.Rgate(params[4 + delta]) | q[0]
+                ops.Rgate(params[5 + delta]) | q[2]
+                ops.MZgate(params[6 + delta], params[7 + delta]) | (q[0], q[2])
+                ops.Rgate(params[8 + delta]) | q[0]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             result = eng.run(qnn)
@@ -119,12 +84,11 @@ class Model:
             output = p0 / normalization  # , p1 / normalization]  # , p2 / normalization]
             return output
 
-        def layer(x):
+        def conv_prep_layer(x):
             """
             8X8 - 64 // 4 = 16 блоков
-            :param x: a single picture
-            :param q:
-            :return:
+            :param x: an array of pixels
+            :return: an array of pixels blocks
             """
             axs_scale, _x = shaper(x)
             input_x = []
@@ -133,11 +97,9 @@ class Model:
                     input_x.append(np.array([_x[i, j], _x[i, j + 1], _x[i + 1, j], _x[i + 1, j + 1]]))
 
             input_x = np.array(input_x)
-            # q = [_layer_circuit(x=block, params=params, delta=delta) for block in input_x]
-            # return np.array(q)
             return input_x
 
-        def output_layer(x, params, delta):
+        def full_con_layer(x, delta):
 
             qnn = sf.Program(4)
             # print('output layer')
@@ -148,35 +110,20 @@ class Model:
                 ops.Sgate(self.squeeze_rate, x[2]) | q[2]
                 ops.Sgate(self.squeeze_rate, x[3]) | q[3]
                 ops.BSgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
-                ops.BSgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
-                ops.BSgate(params[4 + delta], params[5 + delta]) | (q[1], q[2])
-                # ops.BSgate(params[6 + delta], params[7 + delta]) | (q[0], q[3])
-                # ops.BSgate(params[9 + delta], params[8 + delta]) | (q[2], q[0])
-                # ops.BSgate(params[10 + delta], params[11 + delta]) | (q[1], q[3])
-                ops.Rgate(params[12 + delta]) | q[0]
-                ops.Rgate(params[13 + delta]) | q[1]
-                ops.Rgate(params[14 + delta]) | q[2]
-                # ops.Sgate(params[15 + delta]) | q[0]
-                # ops.Sgate(params[16 + delta]) | q[1]
-                # ops.Sgate(params[17 + delta]) | q[2]
-                # ops.Sgate(params[18 + delta]) | q[3]
-                # ops.BSgate(params[19 + delta], params[20 + delta]) | (q[0], q[1])
-                # ops.BSgate(params[21 + delta], params[22 + delta]) | (q[2], q[3])
-                # ops.BSgate(params[23 + delta], params[24 + delta]) | (q[1], q[2])
-                # ops.BSgate(params[25 + delta], params[26 + delta]) | (q[0], q[1])
-                # ops.BSgate(params[27 + delta], params[28 + delta]) | (q[2], q[3])
-                # ops.BSgate(params[29 + delta], params[30 + delta]) | (q[1], q[2])
-                # ops.Rgate(params[31 + delta]) | q[0]
-                # ops.Rgate(params[32 + delta]) | q[1]
-                # ops.Rgate(params[33 + delta]) | q[2]
-                ops.Dgate(params[15 + delta]) | q[0]
-                ops.Dgate(params[16 + delta]) | q[1]
-                ops.Dgate(params[17 + delta]) | q[2]
-                ops.Dgate(params[18 + delta]) | q[3]
-                ops.Pgate(params[19 + delta]) | q[0]
-                ops.Pgate(params[20 + delta]) | q[1]
-                ops.Pgate(params[21 + delta]) | q[2]
-                ops.Pgate(params[22 + delta]) | q[3]
+                ops.Rgate(params[2 + delta]) | q[0]
+                ops.BSgate(params[3 + delta], params[4 + delta]) | (q[2], q[3])
+                ops.Rgate(params[5 + delta]) | q[2]
+                ops.BSgate(params[6 + delta], params[7 + delta]) | (q[0], q[2])
+                ops.Rgate(params[8 + delta]) | q[0]
+                ops.Rgate(params[9 + delta]) | q[2]
+                ops.Dgate(params[10 + delta]) | q[0]
+                ops.Dgate(params[11 + delta]) | q[1]
+                ops.Dgate(params[12 + delta]) | q[2]
+                ops.Dgate(params[13 + delta]) | q[3]
+                ops.Pgate(params[14 + delta]) | q[0]
+                ops.Pgate(params[15 + delta]) | q[1]
+                ops.Pgate(params[16 + delta]) | q[2]
+                ops.Pgate(params[17 + delta]) | q[3]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             result = eng.run(qnn)
@@ -191,14 +138,11 @@ class Model:
             return output
 
         def _single_circuit(x):
-            # print(i)
-            new_x = layer(x)
-            q = [layer_circuit(x=block, params=params, delta=0) for block in new_x]
-            new_xx = layer(np.array(q).flatten())
-            # new_xx = layer(np.array(x).flatten(), params, delta=54)
-            qq = [layer_circuit(x=block, params=params, delta=15) for block in new_xx]
-            output = output_layer(np.array(qq).flatten(), params, delta=30)
-            # output = output_layer(np.array(x).flatten(), params, delta=108)
+            new_x = conv_prep_layer(x)
+            q = [conv_layer(x=block, delta=0) for block in new_x]
+            new_xx = conv_prep_layer(np.array(q).flatten())
+            qq = [conv_layer(x=block, delta=9) for block in new_xx]
+            output = full_con_layer(np.array(qq).flatten(), delta=18)
             return output
 
         circuit_output = [_single_circuit(x) for x in X]
@@ -209,7 +153,7 @@ class Model:
         predictions = outcomes['predictions']
         return predictions
 
-    def fit(self, lr: float, sq: float, steps: int, clf_task: str, trainX: list, trainY: list) -> None:
+    def fit(self, lr: float, sq: float, steps: int, clf_task: str, train_x: list, train_y: list) -> None:
         """
         В задаче сверточных сетей мы обучаем сверточную матрицу:
         :return:
@@ -230,11 +174,11 @@ class Model:
                            'warm_start': False}
 
             self.learner = CircuitLearner(hyperparams=hyperparams)
-            self.learner.train_circuit(X=trainX, Y=trainY, steps=steps)
+            self.learner.train_circuit(X=train_x, Y=train_y, steps=steps)
             upload_params(file_name='Mnist/CNN/params.txt', input_name='CNN_params', data=self.params)
 
-    def score_model(self, testX: np.array, testY: np.array) -> None:
-        test_score = self.learner.score_circuit(X=testX, Y=testY, outputs_to_predictions=self._outputs_to_predictions)
+    def score_model(self, test_x: np.array, test_y: np.array) -> None:
+        test_score = self.learner.score_circuit(X=test_x, Y=test_y, outputs_to_predictions=self._outputs_to_predictions)
         print("\nPossible scores to print: {}".format(list(test_score.keys())))
         print("Accuracy on test set: {}".format(test_score['accuracy']))
         print("Loss on test set: {}".format(test_score['loss']))
