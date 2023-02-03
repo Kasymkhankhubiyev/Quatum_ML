@@ -17,7 +17,7 @@ class Model:
     """
 
     def __init__(self, params=None) -> None:
-        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(36)]
+        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(32)]
         self.squeeze_rate, self.learner, self.clf_task = None, None, None
         self.lr, self.steps = None, None
         self.step = 0
@@ -109,21 +109,17 @@ class Model:
                 ops.Sgate(self.squeeze_rate, x[1]) | q[1]
                 ops.Sgate(self.squeeze_rate, x[2]) | q[2]
                 ops.Sgate(self.squeeze_rate, x[3]) | q[3]
-                ops.BSgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
-                ops.Rgate(params[2 + delta]) | q[0]
-                ops.BSgate(params[3 + delta], params[4 + delta]) | (q[2], q[3])
-                ops.Rgate(params[5 + delta]) | q[2]
-                ops.BSgate(params[6 + delta], params[7 + delta]) | (q[0], q[2])
-                ops.Rgate(params[8 + delta]) | q[0]
-                ops.Rgate(params[9 + delta]) | q[2]
-                ops.Dgate(params[10 + delta]) | q[0]
-                ops.Dgate(params[11 + delta]) | q[1]
-                ops.Dgate(params[12 + delta]) | q[2]
-                ops.Dgate(params[13 + delta]) | q[3]
-                ops.Pgate(params[14 + delta]) | q[0]
-                ops.Pgate(params[15 + delta]) | q[1]
-                ops.Pgate(params[16 + delta]) | q[2]
-                ops.Pgate(params[17 + delta]) | q[3]
+                ops.MZgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
+                ops.MZgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
+                ops.MZgate(params[4 + delta], params[5 + delta]) | (q[1], q[2])
+                ops.Dgate(params[6 + delta]) | q[0]
+                ops.Dgate(params[7 + delta]) | q[1]
+                ops.Dgate(params[8 + delta]) | q[2]
+                ops.Dgate(params[9 + delta]) | q[3]
+                ops.Pgate(params[10 + delta]) | q[0]
+                ops.Pgate(params[11 + delta]) | q[1]
+                ops.Pgate(params[12 + delta]) | q[2]
+                ops.Pgate(params[13 + delta]) | q[3]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             result = eng.run(qnn)
