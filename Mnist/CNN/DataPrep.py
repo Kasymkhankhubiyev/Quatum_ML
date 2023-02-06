@@ -32,7 +32,7 @@ def create_dataset() -> Dataset:
     # загружаем датасет
     digits = load_digits()
 
-    x = np.array(digits.data)
+    x = np.array(digits.data) / 255.0
     y = np.array(digits.target)
 
     trainX, trainY = _mix_data(x, y)
@@ -63,5 +63,5 @@ def create_dataset_binary(class0: int, class1=None) -> Dataset:
 
     sep = round(len(y) * 0.1)  # ~10% for a test
 
-    return Dataset(trainX=np.array(x[sep:]), testX=np.array(x[:sep]),
+    return Dataset(trainX=np.array(x[sep:]) / 255.0, testX=np.array(x[:sep]) / 255.0,
                    trainY=np.array(y[sep:]), testY=np.array(y[:sep]))

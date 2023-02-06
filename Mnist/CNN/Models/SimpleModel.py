@@ -17,7 +17,7 @@ class Model:
     """
 
     def __init__(self, params=None) -> None:
-        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(32)]
+        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(42)]
         self.squeeze_rate, self.learner, self.clf_task = None, None, None
         self.lr, self.steps = None, None
         self.step = 0
@@ -112,14 +112,21 @@ class Model:
                 ops.MZgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
                 ops.MZgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
                 ops.MZgate(params[4 + delta], params[5 + delta]) | (q[1], q[2])
-                ops.Dgate(params[6 + delta]) | q[0]
-                ops.Dgate(params[7 + delta]) | q[1]
-                ops.Dgate(params[8 + delta]) | q[2]
-                ops.Dgate(params[9 + delta]) | q[3]
-                ops.Pgate(params[10 + delta]) | q[0]
-                ops.Pgate(params[11 + delta]) | q[1]
-                ops.Pgate(params[12 + delta]) | q[2]
-                ops.Pgate(params[13 + delta]) | q[3]
+                ops.Sgate(params[6 + delta]) | q[0]
+                ops.Sgate(params[7 + delta]) | q[1]
+                ops.Sgate(params[8 + delta]) | q[2]
+                ops.Sgate(params[9 + delta]) | q[3]
+                ops.MZgate(params[10 + delta], params[11 + delta]) | (q[0], q[1])
+                ops.MZgate(params[12 + delta], params[13 + delta]) | (q[2], q[3])
+                ops.MZgate(params[14 + delta], params[15 + delta]) | (q[1], q[2])
+                ops.Dgate(params[16 + delta]) | q[0]
+                ops.Dgate(params[17 + delta]) | q[1]
+                ops.Dgate(params[18 + delta]) | q[2]
+                ops.Dgate(params[19 + delta]) | q[3]
+                ops.Pgate(params[20 + delta]) | q[0]
+                ops.Pgate(params[21 + delta]) | q[1]
+                ops.Pgate(params[22 + delta]) | q[2]
+                ops.Pgate(params[23 + delta]) | q[3]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             result = eng.run(qnn)
