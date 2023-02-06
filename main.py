@@ -36,19 +36,6 @@ def run_binary_complex() -> None:
     draw_decision_boundary(model=model, N_gridpoints=20, arrayX=data.trainX, arrayY=data.trainY, name='symmetric')
 
 
-# def run_fisher() -> None:
-#     dataset = DataPrep.collect_fisher_dataset()
-#     model = FisherIris.Model.Model()
-#
-#     model.train(lr=.55, steps=250, trainX=dataset.trainX, trainY=dataset.trainY, sq=1.575)
-#     model.score_model(testX=dataset.testX, testY=dataset.testY)
-#
-#     print('accuracy on train: ')
-#     model.predict(data_to_predict=dataset.trainX)
-#     print('accuracy on test: ')
-#     model.predict(data_to_predict=dataset.testX)
-
-#
 # def run_fisher_decision_bound() -> None:
 #     params = ParamsParcers.parce_params(file_name='FisherIris/params_on_2022_10_29_22_M.txt')
 #     trainX, trainY = DataPrep.collect_data_fisher_for_decision_boundary()
