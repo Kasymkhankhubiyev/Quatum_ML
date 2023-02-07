@@ -27,9 +27,11 @@ class Model:
 
     # @staticmethod
     def _myloss(self, circuit_output, targets):
-        # TODO надо свою функцию ошибок сделать.
-        # pass
         # return cross_entropy_with_softmax(outputs=circuit_output, targets=targets) / len(targets)
+        # x, y = np.array(circuit_output), targets
+        # print(x.shape, y.shape)
+        # result = np.sum(np.where(x == y, 1, 0)) / len(targets)
+        # return result
         return square_loss(outputs=circuit_output, targets=targets) / len(targets)
 
     # @staticmethod
@@ -109,16 +111,23 @@ class Model:
                 ops.Sgate(self.squeeze_rate, x[1]) | q[1]
                 ops.Sgate(self.squeeze_rate, x[2]) | q[2]
                 ops.Sgate(self.squeeze_rate, x[3]) | q[3]
-                ops.MZgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
-                ops.MZgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
-                ops.MZgate(params[4 + delta], params[5 + delta]) | (q[1], q[2])
-                ops.Sgate(params[6 + delta]) | q[0]
-                ops.Sgate(params[7 + delta]) | q[1]
-                ops.Sgate(params[8 + delta]) | q[2]
-                ops.Sgate(params[9 + delta]) | q[3]
-                ops.MZgate(params[10 + delta], params[11 + delta]) | (q[0], q[1])
-                ops.MZgate(params[12 + delta], params[13 + delta]) | (q[2], q[3])
-                ops.MZgate(params[14 + delta], params[15 + delta]) | (q[1], q[2])
+                ops.BSgate(params[0], params[1]) | (q[0], q[1])
+                ops.BSgate(params[2], params[3]) | (q[2], q[3])
+                ops.BSgate(params[4], params[5]) | (q[1], q[2])
+                ops.Rgate(params[6]) | q[0]
+                ops.Rgate(params[7]) | q[1]
+                ops.Rgate(params[8]) | q[2]
+                ops.Rgate(params[9]) | q[3]
+                # ops.MZgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
+                # ops.MZgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
+                # ops.MZgate(params[4 + delta], params[5 + delta]) | (q[1], q[2])
+                # ops.Sgate(params[6 + delta]) | q[0]
+                # ops.Sgate(params[7 + delta]) | q[1]
+                # ops.Sgate(params[8 + delta]) | q[2]
+                # ops.Sgate(params[9 + delta]) | q[3]
+                # ops.MZgate(params[10 + delta], params[11 + delta]) | (q[0], q[1])
+                # ops.MZgate(params[12 + delta], params[13 + delta]) | (q[2], q[3])
+                # ops.MZgate(params[14 + delta], params[15 + delta]) | (q[1], q[2])
                 ops.Dgate(params[16 + delta]) | q[0]
                 ops.Dgate(params[17 + delta]) | q[1]
                 ops.Dgate(params[18 + delta]) | q[2]
