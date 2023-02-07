@@ -189,6 +189,7 @@ class Model:
         name = 'Mnist/CNN/results.txt'
         with open(name, 'a') as file:
             file.write('results on ' + str(datetime.datetime.now()) + ' : \n')
+            file.write(f'different convolutions:    {1}\n')
             file.write(f'squeezing parameter:    {self.squeeze_rate}+\n')
             file.write(f'learning rate:     {self.lr} \n')
             file.write(f'steps:     {self.steps} \n')

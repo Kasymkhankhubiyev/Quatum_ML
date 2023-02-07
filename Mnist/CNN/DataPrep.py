@@ -57,7 +57,7 @@ def create_dataset_binary(class0: int, class1=None) -> Dataset:
         y1 = np.ones(len(y1))
     else:
         x1, y1 = x[y != class0], y[y != class0]
-        y1 = np.ones(len(y1))
+        y1 = np.zeros(len(y1))
 
     x, y = _mix_data(np.vstack((x0, x1)), np.hstack([y0, y1]))
 
