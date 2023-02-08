@@ -27,9 +27,6 @@ class Model:
 
     # @staticmethod
     def _myloss(self, circuit_output, targets):
-        # TODO надо свою функцию ошибок сделать.
-        # pass
-        # return cross_entropy_with_softmax(outputs=circuit_output, targets=targets) / len(targets)
         return square_loss(outputs=circuit_output, targets=targets) / len(targets)
 
     # @staticmethod
@@ -47,12 +44,16 @@ class Model:
             """
             if len(x) == 64:
                 return 8, np.array(x.reshape([8, 8]))
+            elif len(x) == 36:
+                return 6, np.array(x.reshape([6, 6]))
             elif len(x) == 16:
                 return 4, np.array(x.reshape([4, 4]))
+            elif len(x) == 9:
+                return 3, np.array(x.reshape([4, 4]))
             elif len(x) == 4:
                 return 2, np.array(x.reshape([2, 2]))
 
-        def conv_layer(x, delta):
+        def pooling1_layer(x, delta):
             """
             54 parameters
             :param x: input data with shape (4,)
@@ -84,7 +85,7 @@ class Model:
             output = p0 / normalization  # , p1 / normalization]  # , p2 / normalization]
             return output
 
-        def conv_prep_layer(x):
+        def conv1_layer(x):
             """
             8X8 - 64 // 4 = 16 блоков
             :param x: an array of pixels
@@ -94,6 +95,36 @@ class Model:
             input_x = []
             for i in range(0, axs_scale, 2):  # x
                 for j in range(0, axs_scale, 2):  # y
+                    input_x.append(np.array([_x[i, j], _x[i, j + 1], _x[i + 1, j], _x[i + 1, j + 1]]))
+
+            input_x = np.array(input_x)
+            return input_x
+
+        def conv2_layer(x):
+            """
+            картинка 8x8 -> маска 2х2 с шагом 1
+            :param x:
+            :return:
+            """
+            axs_scale, _x = shaper(x)
+            input_x = []
+            for i in range(0, axs_scale, 1):  # x
+                for j in range(0, axs_scale, 2):  # y
+                    input_x.append(np.array([_x[i, j], _x[i, j + 1], _x[i + 1, j], _x[i + 1, j + 1]]))
+
+            input_x = np.array(input_x)
+            return input_x
+
+        def conv3_layer(x):
+            """
+            картинка 8x8 -> маска 2х2 с шагом 1
+            :param x:
+            :return:
+            """
+            axs_scale, _x = shaper(x)
+            input_x = []
+            for i in range(0, axs_scale, 2):  # x
+                for j in range(0, axs_scale, 1):  # y
                     input_x.append(np.array([_x[i, j], _x[i, j + 1], _x[i + 1, j], _x[i + 1, j + 1]]))
 
             input_x = np.array(input_x)
@@ -141,10 +172,10 @@ class Model:
             return output
 
         def _single_circuit(x):
-            new_x = conv_prep_layer(x)
-            q = [conv_layer(x=block, delta=0) for block in new_x]
-            new_xx = conv_prep_layer(np.array(q).flatten())
-            qq = [conv_layer(x=block, delta=9) for block in new_xx]
+            new_x = conv1_layer(x)
+            q = [pooling1_layer(x=block, delta=0) for block in new_x]
+            new_xx = conv1_layer(np.array(q).flatten())
+            qq = [pooling1_layer(x=block, delta=9) for block in new_xx]
             output = full_con_layer(np.array(qq).flatten(), delta=18)
             return output
 
