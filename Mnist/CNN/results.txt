@@ -378,3 +378,12 @@ Accuracy on test set: 0.5
 Loss on test set: 0.12708409361769496
 
 
+results on 2023-02-09 17:23:54.214840 : 
+different convolutions:    1
+squeezing parameter:    1.5+
+learning rate:     0.35 
+steps:     10 
+Accuracy on test set: 0.4722222222222222
+Loss on test set: 0.12503878969580506
+
+
