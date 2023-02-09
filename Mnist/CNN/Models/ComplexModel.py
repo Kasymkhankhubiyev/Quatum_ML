@@ -46,6 +46,8 @@ class Model:
                 return 8, np.array(x.reshape([8, 8]))
             elif len(x) == 36:
                 return 6, np.array(x.reshape([6, 6]))
+            elif len(x) == 35:
+                return 5, np.array(x.reshape([5, 5]))
             elif len(x) == 16:
                 return 4, np.array(x.reshape([4, 4]))
             elif len(x) == 9:
@@ -53,7 +55,7 @@ class Model:
             elif len(x) == 4:
                 return 2, np.array(x.reshape([2, 2]))
 
-        def pooling1_layer(x, delta):
+        def conv_3x3_layer(x, delta):
             """
             54 parameters
             :param x: input data with shape (4,)
@@ -85,22 +87,56 @@ class Model:
             output = p0 / normalization  # , p1 / normalization]  # , p2 / normalization]
             return output
 
-        def conv1_layer(x):
+        def conv_2x2_layer(x, delta):
             """
-            8X8 - 64 // 4 = 16 блоков
-            :param x: an array of pixels
-            :return: an array of pixels blocks
+            54 parameters
+            :param x: input data with shape (4,)
+            :param params: circuit params
+            :param delta: parameters shift for the current layer
+            :return: bosons amount in the 0's qumode.
+            """
+            qnn = sf.Program(4)
+            with qnn.context as q:
+                ops.Sgate(self.squeeze_rate, x[0]) | q[0]
+                ops.Sgate(self.squeeze_rate, x[1]) | q[1]
+                ops.Sgate(self.squeeze_rate, x[2]) | q[2]
+                ops.Sgate(self.squeeze_rate, x[3]) | q[3]
+                ops.MZgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
+                ops.MZgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
+                ops.Rgate(params[4 + delta]) | q[0]
+                ops.Rgate(params[5 + delta]) | q[2]
+                ops.MZgate(params[6 + delta], params[7 + delta]) | (q[0], q[2])
+                ops.Rgate(params[8 + delta]) | q[0]
+
+            eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
+            result = eng.run(qnn)
+            state = result.state
+
+            p0 = state.fock_prob([2, 0, 0, 0])
+            p1 = state.fock_prob([0, 2, 0, 0])
+
+            normalization = p0 + p1 + 1e-10  # + p2
+            output = p0 / normalization  # , p1 / normalization]  # , p2 / normalization]
+            return output
+
+        def make_matrixes_3x3(x):
+            """
+                идем матрицей 3х3 с шагом 1,
+                тогда из мтарицы 8х8 получаем 6х6
             """
             axs_scale, _x = shaper(x)
             input_x = []
-            for i in range(0, axs_scale, 2):  # x
-                for j in range(0, axs_scale, 2):  # y
-                    input_x.append(np.array([_x[i, j], _x[i, j + 1], _x[i + 1, j], _x[i + 1, j + 1]]))
+            for i in range(0, axs_scale-2, 1):  # x
+                for j in range(0, axs_scale-2, 1):  # y
+                    input_x.append(np.array([_x[i, j], _x[i, j + 1], _x[i, j + 2],
+                                             _x[i + 1, j], _x[i + 1, j + 1], _x[i + 1, j + 2],
+                                             _x[i + 2, j], _x[i + 2, j + 1], _x[i + 2, j + 2],
+                                             ]))
 
             input_x = np.array(input_x)
             return input_x
 
-        def conv2_layer(x):
+        def make_matrixes_2x2(x):
             """
             картинка 8x8 -> маска 2х2 с шагом 1
             :param x:
@@ -108,27 +144,16 @@ class Model:
             """
             axs_scale, _x = shaper(x)
             input_x = []
-            for i in range(0, axs_scale, 1):  # x
-                for j in range(0, axs_scale, 2):  # y
+            for i in range(0, axs_scale-1, 1):  # x
+                for j in range(0, axs_scale-1, 1):  # y
                     input_x.append(np.array([_x[i, j], _x[i, j + 1], _x[i + 1, j], _x[i + 1, j + 1]]))
 
             input_x = np.array(input_x)
             return input_x
 
-        def conv3_layer(x):
-            """
-            картинка 8x8 -> маска 2х2 с шагом 1
-            :param x:
-            :return:
-            """
-            axs_scale, _x = shaper(x)
-            input_x = []
-            for i in range(0, axs_scale, 2):  # x
-                for j in range(0, axs_scale, 1):  # y
-                    input_x.append(np.array([_x[i, j], _x[i, j + 1], _x[i + 1, j], _x[i + 1, j + 1]]))
-
-            input_x = np.array(input_x)
-            return input_x
+        def max_pooling_2x2(x):
+            _x = make_matrixes_2x2(x)
+            return np.max(_x, axis=1)
 
         def full_con_layer(x, delta):
 
@@ -172,11 +197,12 @@ class Model:
             return output
 
         def _single_circuit(x):
-            new_x = conv1_layer(x)
-            q = [pooling1_layer(x=block, delta=0) for block in new_x]
-            new_xx = conv1_layer(np.array(q).flatten())
-            qq = [pooling1_layer(x=block, delta=9) for block in new_xx]
-            output = full_con_layer(np.array(qq).flatten(), delta=18)
+            _x = make_matrixes_3x3(x)
+            _x = [conv_3x3_layer(x=block, delta=0) for block in _x]
+            _x = max_pooling_2x2(_x)
+            _x = make_matrixes_3x3(np.array(_x).flatten())
+            _x = [conv_2x2_layer(x=block, delta=9) for block in _x]
+            output = full_con_layer(np.array(_x).flatten(), delta=18)
             return output
 
         circuit_output = [_single_circuit(x) for x in X]

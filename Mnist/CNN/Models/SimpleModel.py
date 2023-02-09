@@ -54,7 +54,7 @@ class Model:
             elif len(x) == 4:
                 return 2, np.array(x.reshape([2, 2]))
 
-        def conv_layer(x, delta):
+        def conv_2x2_layer(x, delta):
             """
             54 parameters
             :param x: input data with shape (4,)
@@ -86,7 +86,7 @@ class Model:
             output = p0 / normalization  # , p1 / normalization]  # , p2 / normalization]
             return output
 
-        def conv_prep_layer(x):
+        def make_2x2_matrixes(x):
             """
             8X8 - 64 // 4 = 16 блоков
             :param x: an array of pixels
@@ -153,11 +153,11 @@ class Model:
             return output
 
         def _single_circuit(x):
-            new_x = conv_prep_layer(x)
-            q = [conv_layer(x=block, delta=0) for block in new_x]
-            new_xx = conv_prep_layer(np.array(q).flatten())
-            qq = [conv_layer(x=block, delta=9) for block in new_xx]
-            output = full_con_layer(np.array(qq).flatten(), delta=18)
+            _x = make_2x2_matrixes(x)
+            _x = [conv_2x2_layer(x=block, delta=0) for block in _x]
+            _x = make_2x2_matrixes(np.array(_x).flatten())
+            _x = [conv_2x2_layer(x=block, delta=9) for block in _x]
+            output = full_con_layer(np.array(_x).flatten(), delta=18)
             return output
 
         circuit_output = [_single_circuit(x) for x in X]
