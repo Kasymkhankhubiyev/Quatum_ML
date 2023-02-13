@@ -17,7 +17,7 @@ class Model:
     """
 
     def __init__(self, params=None) -> None:
-        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(42)]
+        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(43)]
         self.squeeze_rate, self.learner, self.clf_task = None, None, None
         self.lr, self.steps = None, None
         self.step = 0
@@ -59,29 +59,48 @@ class Model:
             """
             54 parameters
             :param x: input data with shape (4,)
-            :param params: circuit params
             :param delta: parameters shift for the current layer
             :return: bosons amount in the 0's qumode.
             """
-            qnn = sf.Program(4)
+            qnn = sf.Program(9)
             with qnn.context as q:
                 ops.Sgate(self.squeeze_rate, x[0]) | q[0]
                 ops.Sgate(self.squeeze_rate, x[1]) | q[1]
                 ops.Sgate(self.squeeze_rate, x[2]) | q[2]
                 ops.Sgate(self.squeeze_rate, x[3]) | q[3]
-                ops.MZgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
-                ops.MZgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
-                ops.Rgate(params[4 + delta]) | q[0]
-                ops.Rgate(params[5 + delta]) | q[2]
-                ops.MZgate(params[6 + delta], params[7 + delta]) | (q[0], q[2])
-                ops.Rgate(params[8 + delta]) | q[0]
+                ops.Sgate(self.squeeze_rate, x[4]) | q[4]
+                ops.Sgate(self.squeeze_rate, x[5]) | q[5]
+                ops.Sgate(self.squeeze_rate, x[6]) | q[6]
+                ops.Sgate(self.squeeze_rate, x[7]) | q[7]
+                ops.Sgate(self.squeeze_rate, x[8]) | q[8]
+                ops.BSgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
+                ops.BSgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
+                ops.BSgate(params[4 + delta], params[5 + delta]) | (q[4], q[5])
+                ops.BSgate(params[6 + delta], params[7 + delta]) | (q[6], q[7])
+                ops.Rgate(params[16 + delta]) | q[7]
+                ops.BSgate(params[8 + delta], params[9 + delta]) | (q[7], q[8])
+                ops.Rgate(params[17 + delta]) | q[1]
+                ops.Rgate(params[18 + delta]) | q[2]
+                ops.BSgate(params[10 + delta], params[11 + delta]) | (q[1], q[2])
+                ops.Rgate(params[19 + delta]) | q[5]
+                ops.Rgate(params[20 + delta]) | q[7]
+                ops.BSgate(params[12 + delta], params[13 + delta]) | (q[5], q[7])
+                ops.Rgate(params[21 + delta]) | q[5]
+                ops.Rgate(params[22 + delta]) | q[2]
+                ops.BSgate(params[14 + delta], params[15 + delta]) | (q[2], q[5])
+                # ops.Rgate(params[16 + delta]) | q[0]
+                # ops.Rgate(params[17 + delta]) | q[2]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             result = eng.run(qnn)
             state = result.state
 
-            p0 = state.fock_prob([2, 0, 0, 0])
-            p1 = state.fock_prob([0, 2, 0, 0])
+            modes = 9*[0]
+            modes[2] = 2
+            p0 = state.fock_prob(modes)
+            modes[2] = 0
+            modes[5] = 2
+            p1 = state.fock_prob(modes)
 
             normalization = p0 + p1 + 1e-10  # + p2
             output = p0 / normalization  # , p1 / normalization]  # , p2 / normalization]
@@ -91,7 +110,6 @@ class Model:
             """
             54 parameters
             :param x: input data with shape (4,)
-            :param params: circuit params
             :param delta: parameters shift for the current layer
             :return: bosons amount in the 0's qumode.
             """
@@ -101,12 +119,12 @@ class Model:
                 ops.Sgate(self.squeeze_rate, x[1]) | q[1]
                 ops.Sgate(self.squeeze_rate, x[2]) | q[2]
                 ops.Sgate(self.squeeze_rate, x[3]) | q[3]
-                ops.MZgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
-                ops.MZgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
+                ops.BSgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
+                ops.BSgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
                 ops.Rgate(params[4 + delta]) | q[0]
                 ops.Rgate(params[5 + delta]) | q[2]
-                ops.MZgate(params[6 + delta], params[7 + delta]) | (q[0], q[2])
-                ops.Rgate(params[8 + delta]) | q[0]
+                ops.BSgate(params[6 + delta], params[7 + delta]) | (q[0], q[2])
+                # ops.Rgate(params[8 + delta]) | q[0]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             result = eng.run(qnn)
@@ -165,31 +183,33 @@ class Model:
                 ops.Sgate(self.squeeze_rate, x[1]) | q[1]
                 ops.Sgate(self.squeeze_rate, x[2]) | q[2]
                 ops.Sgate(self.squeeze_rate, x[3]) | q[3]
-                ops.MZgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
-                ops.MZgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
-                ops.MZgate(params[4 + delta], params[5 + delta]) | (q[1], q[2])
-                ops.Sgate(params[6 + delta]) | q[0]
-                ops.Sgate(params[7 + delta]) | q[1]
-                ops.Sgate(params[8 + delta]) | q[2]
-                ops.Sgate(params[9 + delta]) | q[3]
-                ops.MZgate(params[10 + delta], params[11 + delta]) | (q[0], q[1])
-                ops.MZgate(params[12 + delta], params[13 + delta]) | (q[2], q[3])
-                ops.MZgate(params[14 + delta], params[15 + delta]) | (q[1], q[2])
-                ops.Dgate(params[16 + delta]) | q[0]
-                ops.Dgate(params[17 + delta]) | q[1]
-                ops.Dgate(params[18 + delta]) | q[2]
-                ops.Dgate(params[19 + delta]) | q[3]
-                ops.Pgate(params[20 + delta]) | q[0]
-                ops.Pgate(params[21 + delta]) | q[1]
-                ops.Pgate(params[22 + delta]) | q[2]
-                ops.Pgate(params[23 + delta]) | q[3]
+                ops.BSgate(params[0 + delta], params[1 + delta]) | (q[0], q[1])
+                ops.BSgate(params[2 + delta], params[3 + delta]) | (q[2], q[3])
+                ops.BSgate(params[4 + delta], params[5 + delta]) | (q[1], q[2])
+                # ops.Sgate(params[6 + delta]) | q[0]
+                # ops.Sgate(params[7 + delta]) | q[1]
+                # ops.Sgate(params[8 + delta]) | q[2]
+                # ops.Sgate(params[9 + delta]) | q[3]
+                # ops.MZgate(params[10 + delta], params[11 + delta]) | (q[0], q[1])
+                # ops.MZgate(params[12 + delta], params[13 + delta]) | (q[2], q[3])
+                # ops.MZgate(params[14 + delta], params[15 + delta]) | (q[1], q[2])
+                ops.Rgate(params[6 + delta]) | q[1]
+                ops.Rgate(params[7 + delta]) | q[2]
+                # ops.Dgate(params[16 + delta]) | q[0]
+                ops.Dgate(params[8 + delta]) | q[1]
+                ops.Dgate(params[9 + delta]) | q[2]
+                # ops.Dgate(params[19 + delta]) | q[3]
+                # ops.Pgate(params[20 + delta]) | q[0]
+                ops.Pgate(params[10 + delta]) | q[1]
+                ops.Pgate(params[11 + delta]) | q[2]
+                # ops.Pgate(params[23 + delta]) | q[3]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
             result = eng.run(qnn)
             state = result.state
 
-            p0 = state.fock_prob([2, 0, 0, 0])
-            p1 = state.fock_prob([0, 2, 0, 0])
+            p0 = state.fock_prob([0, 2, 0, 0])
+            p1 = state.fock_prob([0, 0, 2, 0])
 
             normalization = p0 + p1 + 1e-10  # + p2
             output = p0 / normalization  # , p1 / normalization]  # , p2 / normalization]
@@ -199,10 +219,10 @@ class Model:
         def _single_circuit(x):
             _x = make_matrixes_3x3(x)
             _x = [conv_3x3_layer(x=block, delta=0) for block in _x]
-            _x = max_pooling_2x2(_x)
+            _x = max_pooling_2x2(np.array(_x).flatten())
             _x = make_matrixes_3x3(np.array(_x).flatten())
-            _x = [conv_2x2_layer(x=block, delta=9) for block in _x]
-            output = full_con_layer(np.array(_x).flatten(), delta=18)
+            _x = [conv_2x2_layer(x=block, delta=23) for block in _x]
+            output = full_con_layer(np.array(_x).flatten(), delta=31)
             return output
 
         circuit_output = [_single_circuit(x) for x in X]
