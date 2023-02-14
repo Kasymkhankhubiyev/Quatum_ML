@@ -148,7 +148,7 @@ class Model:
                 for j in range(0, axs_scale-2, 1):  # y
                     input_x.append(np.array([_x[i, j], _x[i, j + 1], _x[i, j + 2],
                                              _x[i + 1, j], _x[i + 1, j + 1], _x[i + 1, j + 2],
-                                             _x[i + 2, j], _x[i + 2, j + 1], _x[i + 2, j + 2],
+                                             _x[i + 2, j], _x[i + 2, j + 1], _x[i + 2, j + 2]
                                              ]))
 
             input_x = np.array(input_x)
@@ -220,7 +220,9 @@ class Model:
             _x = make_matrixes_3x3(x)
             _x = [conv_3x3_layer(x=block, delta=0) for block in _x]
             _x = max_pooling_2x2(np.array(_x).flatten())
+            print(_x)
             _x = make_matrixes_3x3(np.array(_x).flatten())
+            print(_x)
             _x = [conv_2x2_layer(x=block, delta=23) for block in _x]
             output = full_con_layer(np.array(_x).flatten(), delta=31)
             return output
