@@ -25,15 +25,12 @@ class Model:
         if params is not None:
             pass
 
-    # @staticmethod
     def _myloss(self, circuit_output, targets):
         return square_loss(outputs=circuit_output, targets=targets) / len(targets)
 
-    # @staticmethod
     def _outputs_to_predictions(self, circuit_output):
         return np.round(circuit_output)
 
-    # @staticmethod
     def _circuit(self, X, params):
 
         def shaper(x) -> tuple[int, np.array]:
@@ -51,7 +48,7 @@ class Model:
             elif len(x) == 16:
                 return 4, np.array(x.reshape([4, 4]))
             elif len(x) == 9:
-                return 3, np.array(x.reshape([4, 4]))
+                return 3, np.array(x.reshape([3, 3]))
             elif len(x) == 4:
                 return 2, np.array(x.reshape([2, 2]))
 
@@ -103,7 +100,7 @@ class Model:
             p1 = state.fock_prob(modes)
 
             normalization = p0 + p1 + 1e-10  # + p2
-            output = p0 / normalization  # , p1 / normalization]  # , p2 / normalization]
+            output = p0 / normalization
             return output
 
         def conv_2x2_layer(x, delta):
@@ -154,7 +151,7 @@ class Model:
             input_x = np.array(input_x)
             return input_x
 
-        def make_matrixes_2x2(x):
+        def make_matrixes_2x2(x, step):
             """
             картинка 8x8 -> маска 2х2 с шагом 1
             :param x:
@@ -162,15 +159,15 @@ class Model:
             """
             axs_scale, _x = shaper(x)
             input_x = []
-            for i in range(0, axs_scale-1, 1):  # x
-                for j in range(0, axs_scale-1, 1):  # y
+            for i in range(0, axs_scale-1, step):  # x
+                for j in range(0, axs_scale-1, step):  # y
                     input_x.append(np.array([_x[i, j], _x[i, j + 1], _x[i + 1, j], _x[i + 1, j + 1]]))
 
             input_x = np.array(input_x)
             return input_x
 
         def max_pooling_2x2(x):
-            _x = make_matrixes_2x2(x)
+            _x = make_matrixes_2x2(x, 2)
             return np.max(_x, axis=1)
 
         def full_con_layer(x, delta):
@@ -218,11 +215,11 @@ class Model:
 
         def _single_circuit(x):
             _x = make_matrixes_3x3(x)
-            _x = [conv_3x3_layer(x=block, delta=0) for block in _x]
-            _x = max_pooling_2x2(np.array(_x).flatten())
-            print(_x)
-            _x = make_matrixes_3x3(np.array(_x).flatten())
-            print(_x)
+            _x = [conv_3x3_layer(x=block, delta=0) for block in _x]  # -> 6x6
+            _x = max_pooling_2x2(np.array(_x).flatten())  # -> 3x3
+            # print(_x, np.array(_x).shape)
+            _x = make_matrixes_2x2(np.array(_x).flatten(), 1)
+            # print(_x)
             _x = [conv_2x2_layer(x=block, delta=23) for block in _x]
             output = full_con_layer(np.array(_x).flatten(), delta=31)
             return output

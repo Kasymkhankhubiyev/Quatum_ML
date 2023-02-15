@@ -58,6 +58,7 @@ def collect_fisher_dataset() -> Dataset:
     return Dataset(trainX=np.array(trainX), trainY=np.array(trainY),
                    testX=np.array(testX), testY=np.array(testY))
 
+
 def collect_data_fisher_for_decision_boundary():
     iris = datasets.load_iris()
     trainX = iris.data

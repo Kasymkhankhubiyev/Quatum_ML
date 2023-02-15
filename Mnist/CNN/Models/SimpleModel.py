@@ -25,20 +25,12 @@ class Model:
         if params is not None:
             pass
 
-    # @staticmethod
     def _myloss(self, circuit_output, targets):
-        # return cross_entropy_with_softmax(outputs=circuit_output, targets=targets) / len(targets)
-        # x, y = np.array(circuit_output), targets
-        # print(x.shape, y.shape)
-        # result = np.sum(np.where(x == y, 1, 0)) / len(targets)
-        # return result
         return square_loss(outputs=circuit_output, targets=targets) / len(targets)
 
-    # @staticmethod
     def _outputs_to_predictions(self, circuit_output):
         return np.round(circuit_output)
 
-    # @staticmethod
     def _circuit(self, X, params):
 
         def shaper(x) -> tuple[int, np.array]:

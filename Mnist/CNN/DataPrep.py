@@ -59,7 +59,8 @@ def create_dataset_binary(class0: int, class1=None) -> Dataset:
         x1, y1 = x[y != class0], y[y != class0]
         y1 = np.zeros(len(y1))
 
-    x, y = _mix_data(np.vstack((x0, x1)), np.hstack([y0, y1]))
+    # x, y = _mix_data(np.vstack((x0, x1)), np.hstack([y0, y1]))
+    x, y = _mix_data(np.vstack((x0[:35], x1[:35])), np.hstack([y0[:35], y1[:35]]))
 
     sep = round(len(y) * 0.1)  # ~10% for a test
 
