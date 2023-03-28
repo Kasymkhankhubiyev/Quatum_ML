@@ -2,8 +2,10 @@ from Binary_Classification.Normal_distribution.DataPreparation import *
 from Binary_Classification.Normal_distribution.VisualizeData import *
 from Binary_Classification.Normal_distribution import Circuit
 # from NormalMultiClassClassification import runfile
-from Mnist.CNN.runfile import run
+# from Mnist.CNN.runfile import run
+from FisherIris.runfile import run
 
+# from FisherIris.Model import Model
 
 def run_binary() -> None:
     data = create_data_set(20, 1.5)

@@ -18,7 +18,7 @@ class Model:
 
     def __init__(self, params=None) -> None:
         self.lr, self.steps, self.squeeze_param, self.learner = None, None, None, None
-        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(46)]
+        self.params = [make_param(name='param' + str(i), constant=.5) for i in range(8)]
         if params is not None:
             self.params = [make_param(name='param' + str(i), constant=params[i]) for i in range(46)]
             self.squeeze_param = 0.175
@@ -52,40 +52,17 @@ class Model:
                 ops.Sgate(squeezing_amount, x[1]) | q[1]
                 ops.Sgate(squeezing_amount, x[2]) | q[2]
                 ops.Sgate(squeezing_amount, x[3]) | q[3]
-                ops.BSgate(params[0], params[1]) | (q[0], q[1])
-                ops.BSgate(params[2], params[3]) | (q[2], q[3])
-                ops.BSgate(params[4], params[5]) | (q[1], q[2])
-                ops.BSgate(params[6], params[7]) | (q[0], q[1])
-                ops.BSgate(params[9], params[8]) | (q[2], q[3])
-                ops.BSgate(params[10], params[11]) | (q[1], q[2])
-                ops.Rgate(params[12]) | q[0]
-                ops.Rgate(params[13]) | q[1]
-                ops.Rgate(params[14]) | q[2]
-                ops.Sgate(params[15]) | q[0]
-                ops.Sgate(params[16]) | q[1]
-                ops.Sgate(params[17]) | q[2]
-                ops.Sgate(params[18]) | q[3]
-                ops.BSgate(params[19], params[20]) | (q[0], q[1])
-                ops.BSgate(params[21], params[22]) | (q[2], q[3])
-                ops.BSgate(params[23], params[24]) | (q[1], q[2])
-                ops.BSgate(params[25], params[26]) | (q[0], q[1])
-                ops.BSgate(params[27], params[28]) | (q[2], q[3])
-                ops.BSgate(params[29], params[30]) | (q[1], q[2])
-                ops.Rgate(params[31]) | q[0]
-                ops.Rgate(params[32]) | q[1]
-                ops.Rgate(params[33]) | q[2]
-                ops.Dgate(params[34]) | q[0]
-                ops.Dgate(params[35]) | q[1]
-                ops.Dgate(params[36]) | q[2]
-                ops.Dgate(params[37]) | q[3]
-                ops.Pgate(params[38]) | q[0]
-                ops.Pgate(params[39]) | q[1]
-                ops.Pgate(params[40]) | q[2]
-                ops.Pgate(params[41]) | q[3]
-                # ops.Kgate(params[42]) | q[0]
-                # ops.Kgate(params[43]) | q[1]
-                # ops.Kgate(params[44]) | q[2]
-                # ops.Kgate(params[45]) | q[3]
+                ops.BSgate(np.pi / 4, 0) | (q[0], q[1])
+                ops.BSgate(np.pi / 4, 0) | (q[2], q[3])
+                ops.Rgate(params[0]) | q[0]
+                ops.Rgate(params[1]) | q[1]
+                ops.Rgate(params[2]) | q[2]
+                ops.BSgate(np.pi / 4, 0) | (q[1], q[2])
+                ops.Rgate(params[3]) | q[1]
+                ops.Rgate(params[4]) | q[2]
+                ops.Dgate(params[5]) | q[0]
+                ops.Dgate(params[6]) | q[1]
+                ops.Dgate(params[7]) | q[2]
 
             eng = sf.Engine('fock', backend_options={'cutoff_dim': 5, 'eval': True})
 
@@ -147,21 +124,24 @@ class Model:
         self.learner = CircuitLearner(hyperparams=hyperparams)
 
         self.learner.train_circuit(X=trainX, Y=trainY, steps=steps)
-        self._upload_params()
+        # self._upload_params()
 
-    def score_model(self, testX: np.array, testY: np.array) -> None:
+    def score_model(self, testX: np.array, testY: np.array, save=True):
         test_score = self.learner.score_circuit(X=testX, Y=testY, outputs_to_predictions=self._outputs_to_predictions)
         print("\nPossible scores to print: {}".format(list(test_score.keys())))
         print("Accuracy on test set: {}".format(test_score['accuracy']))
         print("Loss on test set: {}".format(test_score['loss']))
 
-        name = 'FisherIris/results.txt'
-        with open(name, 'a') as file:
-            file.write('results on ' + str(datetime.datetime.now()) + ' : \n')
-            file.write(f'squeezing parameter:    {self.squeeze_param}+\n')
-            file.write(f'learning rate:     {self.lr} \n')
-            file.write(f'steps:     {self.steps} \n')
-            for i in range(len(testY)):
-                file.write('x: ' + str(testX[i]) + ', y: ' + str(testY[i]) + '\n')
-            file.write("Accuracy on test set: {}".format(test_score['accuracy']) + '\n')
-            file.write("Loss on test set: {}".format(test_score['loss']) + '\n\n\n')
+        if save:
+            name = 'FisherIris/results.txt'
+            with open(name, 'a') as file:
+                file.write('results on ' + str(datetime.datetime.now()) + ' : \n')
+                file.write(f'squeezing parameter:    {self.squeeze_param}+\n')
+                file.write(f'learning rate:     {self.lr} \n')
+                file.write(f'steps:     {self.steps} \n')
+                for i in range(len(testY)):
+                    file.write('x: ' + str(testX[i]) + ', y: ' + str(testY[i]) + '\n')
+                file.write("Accuracy on test set: {}".format(test_score['accuracy']) + '\n')
+                file.write("Loss on test set: {}".format(test_score['loss']) + '\n\n\n')
+        else:
+            return test_score['accuracy'], test_score['loss']

@@ -217,9 +217,9 @@ class Model:
             _x = make_matrixes_3x3(x)
             _x = [conv_3x3_layer(x=block, delta=0) for block in _x]  # -> 6x6
             _x = max_pooling_2x2(np.array(_x).flatten())  # -> 3x3
-            # print(_x, np.array(_x).shape)
+            print(np.array(_x).shape)
             _x = make_matrixes_2x2(np.array(_x).flatten(), 1)
-            # print(_x)
+            print(np.array(_x).shape)
             _x = [conv_2x2_layer(x=block, delta=23) for block in _x]
             output = full_con_layer(np.array(_x).flatten(), delta=31)
             return output
